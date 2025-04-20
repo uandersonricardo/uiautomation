@@ -1,43 +1,149 @@
 package uiautomation
 
+import (
+	"syscall"
+	"unsafe"
+
+	"github.com/go-ole/go-ole"
+)
+
 type EventId uintptr
 
 const (
-	UIA_ActiveTextPositionChangedEventId                 EventId = 20036
-	UIA_AsyncContentLoadedEventId                        EventId = 20006
-	UIA_AutomationFocusChangedEventId                    EventId = 20005
-	UIA_AutomationPropertyChangedEventId                 EventId = 20004
-	UIA_ChangesEventId                                   EventId = 20034
-	UIA_Drag_DragCancelEventId                           EventId = 20027
-	UIA_Drag_DragCompleteEventId                         EventId = 20028
-	UIA_Drag_DragStartEventId                            EventId = 20026
-	UIA_DropTarget_DragEnterEventId                      EventId = 20029
-	UIA_DropTarget_DragLeaveEventId                      EventId = 20030
-	UIA_DropTarget_DroppedEventId                        EventId = 20031
-	UIA_HostedFragmentRootsInvalidatedEventId            EventId = 20025
-	UIA_InputDiscardedEventId                            EventId = 20022
-	UIA_InputReachedOtherElementEventId                  EventId = 20021
-	UIA_InputReachedTargetEventId                        EventId = 20020
-	UIA_Invoke_InvokedEventId                            EventId = 20009
-	UIA_LayoutInvalidatedEventId                         EventId = 20008
-	UIA_LiveRegionChangedEventId                         EventId = 20024
-	UIA_MenuClosedEventId                                EventId = 20007
-	UIA_MenuModeEndEventId                               EventId = 20019
-	UIA_MenuModeStartEventId                             EventId = 20018
-	UIA_MenuOpenedEventId                                EventId = 20003
-	UIA_NotificationEventId                              EventId = 20035
-	UIA_Selection_InvalidatedEventId                     EventId = 20013
-	UIA_SelectionItem_ElementAddedToSelectionEventId     EventId = 20010
-	UIA_SelectionItem_ElementRemovedFromSelectionEventId EventId = 20011
-	UIA_SelectionItem_ElementSelectedEventId             EventId = 20012
-	UIA_StructureChangedEventId                          EventId = 20002
-	UIA_SystemAlertEventId                               EventId = 20023
-	UIA_Text_TextChangedEventId                          EventId = 20015
-	UIA_Text_TextSelectionChangedEventId                 EventId = 20014
-	UIA_TextEdit_ConversionTargetChangedEventId          EventId = 20033
-	UIA_TextEdit_TextChangedEventId                      EventId = 20032
-	UIA_ToolTipClosedEventId                             EventId = 20001
-	UIA_ToolTipOpenedEventId                             EventId = 20000
-	UIA_Window_WindowClosedEventId                       EventId = 20017
-	UIA_Window_WindowOpenedEventId                       EventId = 20016
+	ActiveTextPositionChangedEventId                EventId = 20036
+	AsyncContentLoadedEventId                       EventId = 20006
+	AutomationFocusChangedEventId                   EventId = 20005
+	AutomationPropertyChangedEventId                EventId = 20004
+	ChangesEventId                                  EventId = 20034
+	DragDragCancelEventId                           EventId = 20027
+	DragDragCompleteEventId                         EventId = 20028
+	DragDragStartEventId                            EventId = 20026
+	DropTargetDragEnterEventId                      EventId = 20029
+	DropTargetDragLeaveEventId                      EventId = 20030
+	DropTargetDroppedEventId                        EventId = 20031
+	HostedFragmentRootsInvalidatedEventId           EventId = 20025
+	InputDiscardedEventId                           EventId = 20022
+	InputReachedOtherElementEventId                 EventId = 20021
+	InputReachedTargetEventId                       EventId = 20020
+	InvokeInvokedEventId                            EventId = 20009
+	LayoutInvalidatedEventId                        EventId = 20008
+	LiveRegionChangedEventId                        EventId = 20024
+	MenuClosedEventId                               EventId = 20007
+	MenuModeEndEventId                              EventId = 20019
+	MenuModeStartEventId                            EventId = 20018
+	MenuOpenedEventId                               EventId = 20003
+	NotificationEventId                             EventId = 20035
+	SelectionInvalidatedEventId                     EventId = 20013
+	SelectionItemElementAddedToSelectionEventId     EventId = 20010
+	SelectionItemElementRemovedFromSelectionEventId EventId = 20011
+	SelectionItemElementSelectedEventId             EventId = 20012
+	StructureChangedEventId                         EventId = 20002
+	SystemAlertEventId                              EventId = 20023
+	TextTextChangedEventId                          EventId = 20015
+	TextTextSelectionChangedEventId                 EventId = 20014
+	TextEditConversionTargetChangedEventId          EventId = 20033
+	TextEditTextChangedEventId                      EventId = 20032
+	ToolTipClosedEventId                            EventId = 20001
+	ToolTipOpenedEventId                            EventId = 20000
+	WindowWindowClosedEventId                       EventId = 20017
+	WindowWindowOpenedEventId                       EventId = 20016
 )
+
+type UIAutomationEventHandler struct {
+	ole.IUnknown
+}
+
+type UIAutomationEventHandlerVtbl struct {
+	ole.IUnknownVtbl
+	HandleAutomationEvent uintptr
+}
+
+func (eh *UIAutomationEventHandler) VTable() *UIAutomationEventHandlerVtbl {
+	return (*UIAutomationEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
+}
+
+func (eh *UIAutomationEventHandler) HandleAutomationEvent(element *UIAutomationElement, eventId EventId) error {
+	hr, _, _ := syscall.SyscallN(
+		eh.VTable().HandleAutomationEvent,
+		uintptr(unsafe.Pointer(eh)),
+		uintptr(unsafe.Pointer(element)),
+		uintptr(eventId),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+type UIAutomationPropertyChangedEventHandler struct {
+	ole.IUnknown
+}
+
+type UIAutomationPropertyChangedEventHandlerVtbl struct {
+	ole.IUnknownVtbl
+	HandlePropertyChangedEvent uintptr
+}
+
+func (eh *UIAutomationPropertyChangedEventHandler) VTable() *UIAutomationPropertyChangedEventHandlerVtbl {
+	return (*UIAutomationPropertyChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
+}
+
+func (eh *UIAutomationPropertyChangedEventHandler) HandlePropertyChangedEvent(sender *UIAutomationElement, propertyId int32, newValue interface{}) error {
+	hr, _, _ := syscall.SyscallN(
+		eh.VTable().HandlePropertyChangedEvent,
+		uintptr(unsafe.Pointer(eh)),
+		uintptr(unsafe.Pointer(sender)),
+		uintptr(propertyId),
+		uintptr(unsafe.Pointer(&newValue)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+type UIAutomationFocusChangedEventHandler struct {
+	ole.IUnknown
+}
+type UIAutomationFocusChangedEventHandlerVtbl struct {
+	ole.IUnknownVtbl
+	HandleFocusChangedEvent uintptr
+}
+
+func (eh *UIAutomationFocusChangedEventHandler) VTable() *UIAutomationFocusChangedEventHandlerVtbl {
+	return (*UIAutomationFocusChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
+}
+
+func (eh *UIAutomationFocusChangedEventHandler) HandleFocusChangedEvent(element *UIAutomationElement) error {
+	hr, _, _ := syscall.SyscallN(
+		eh.VTable().HandleFocusChangedEvent,
+		uintptr(unsafe.Pointer(eh)),
+		uintptr(unsafe.Pointer(element)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+type UIAutomationStructureChangedEventHandler struct {
+	ole.IUnknown
+}
+type UIAutomationStructureChangedEventHandlerVtbl struct {
+	ole.IUnknownVtbl
+	HandleStructureChangedEvent uintptr
+}
+
+func (eh *UIAutomationStructureChangedEventHandler) VTable() *UIAutomationStructureChangedEventHandlerVtbl {
+	return (*UIAutomationStructureChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
+}
+
+func (eh *UIAutomationStructureChangedEventHandler) HandleStructureChangedEvent(sender *UIAutomationElement, changeType StructureChangeType, runtimeId []int32) error {
+	panic("Not implemented")
+}
