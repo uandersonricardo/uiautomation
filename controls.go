@@ -45,3 +45,67 @@ const (
 	TreeItemControlTypeId     ControlTypeId = 50024
 	WindowControlTypeId       ControlTypeId = 50032
 )
+
+var ControlTypeNames = map[ControlTypeId]string{
+	AppBarControlTypeId:       "AppBarControl",
+	ButtonControlTypeId:       "ButtonControl",
+	CalendarControlTypeId:     "CalendarControl",
+	CheckBoxControlTypeId:     "CheckBoxControl",
+	ComboBoxControlTypeId:     "ComboBoxControl",
+	CustomControlTypeId:       "CustomControl",
+	DataGridControlTypeId:     "DataGridControl",
+	DataItemControlTypeId:     "DataItemControl",
+	DocumentControlTypeId:     "DocumentControl",
+	EditControlTypeId:         "EditControl",
+	GroupControlTypeId:        "GroupControl",
+	HeaderControlTypeId:       "HeaderControl",
+	HeaderItemControlTypeId:   "HeaderItemControl",
+	HyperlinkControlTypeId:    "HyperlinkControl",
+	ImageControlTypeId:        "ImageControl",
+	ListControlTypeId:         "ListControl",
+	ListItemControlTypeId:     "ListItemControl",
+	MenuBarControlTypeId:      "MenuBarControl",
+	MenuControlTypeId:         "MenuControl",
+	MenuItemControlTypeId:     "MenuItemControl",
+	PaneControlTypeId:         "PaneControl",
+	ProgressBarControlTypeId:  "ProgressBarControl",
+	RadioButtonControlTypeId:  "RadioButtonControl",
+	ScrollBarControlTypeId:    "ScrollBarControl",
+	SemanticZoomControlTypeId: "SemanticZoomControl",
+	SeparatorControlTypeId:    "SeparatorControl",
+	SliderControlTypeId:       "SliderControl",
+	SpinnerControlTypeId:      "SpinnerControl",
+	SplitButtonControlTypeId:  "SplitButtonControl",
+	StatusBarControlTypeId:    "StatusBarControl",
+	TabControlTypeId:          "TabControl",
+	TabItemControlTypeId:      "TabItemControl",
+	TableControlTypeId:        "TableControl",
+	TextControlTypeId:         "TextControl",
+	ThumbControlTypeId:        "ThumbControl",
+	TitleBarControlTypeId:     "TitleBarControl",
+	ToolBarControlTypeId:      "ToolBarControl",
+	ToolTipControlTypeId:      "ToolTipControl",
+	TreeControlTypeId:         "TreeControl",
+	TreeItemControlTypeId:     "TreeItemControl",
+	WindowControlTypeId:       "WindowControl",
+}
+
+func ControlTypeIdFromName(name string) ControlTypeId {
+	for id, n := range ControlTypeNames {
+		if n == name {
+			return id
+		}
+	}
+
+	return 0
+}
+
+func ControlTypeNameFromId(id ControlTypeId) string {
+	for i, n := range ControlTypeNames {
+		if i == id {
+			return n
+		}
+	}
+
+	return ""
+}

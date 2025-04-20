@@ -131,6 +131,82 @@ func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IU
 	return patternObject, nil
 }
 
+func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TextPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	textPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationTextPattern)(unsafe.Pointer(textPattern)), nil
+}
+
+func (elem *UIAutomationElement) GetValuePattern() (*UIAutomationValuePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(ValuePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	valuePattern, err := patternObject.QueryInterface(IID_IUIAutomationValuePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationValuePattern)(unsafe.Pointer(valuePattern)), nil
+}
+
+func (elem *UIAutomationElement) CurrentControlType() (ControlTypeId, error) {
+	var retVal ControlTypeId
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentControlType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *UIAutomationElement) CurrentControlTypeName() (string, error) {
+	controlTypeId, err := elem.CurrentControlType()
+
+	if err != nil {
+		return "", err
+	}
+
+	controlTypeName := ControlTypeNameFromId(controlTypeId)
+
+	return controlTypeName, nil
+}
+
+func (elem *UIAutomationElement) CurrentName() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentName,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
 func (elem *UIAutomationElement) CurrentAutomationId() (string, error) {
 	var retVal *uint16
 
@@ -152,22 +228,6 @@ func (elem *UIAutomationElement) CurrentClassName() (string, error) {
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentClassName,
-		uintptr(unsafe.Pointer(elem)),
-		uintptr(unsafe.Pointer(&retVal)),
-	)
-
-	if hr != 0 {
-		return "", ole.NewError(hr)
-	}
-
-	return ole.BstrToString(retVal), nil
-}
-
-func (elem *UIAutomationElement) CurrentName() (string, error) {
-	var retVal *uint16
-
-	hr, _, _ := syscall.SyscallN(
-		elem.VTable().Get_CurrentName,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)

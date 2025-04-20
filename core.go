@@ -162,3 +162,128 @@ type RawElementProviderSimpleVtbl struct {
 func (rep *RawElementProviderSimple) VTable() *RawElementProviderSimpleVtbl {
 	return (*RawElementProviderSimpleVtbl)(unsafe.Pointer(rep.RawVTable))
 }
+
+type UIAutomationTextRangeArray struct {
+	ole.IUnknown
+}
+
+type UIAutomationTextRangeArrayVtbl struct {
+	ole.IUnknownVtbl
+	Get_Length uintptr
+	GetElement uintptr
+}
+
+func (tra *UIAutomationTextRangeArray) VTable() *UIAutomationTextRangeArrayVtbl {
+	return (*UIAutomationTextRangeArrayVtbl)(unsafe.Pointer(tra.RawVTable))
+}
+
+func (tra *UIAutomationTextRangeArray) Length() (int32, error) {
+	var length int32
+
+	hr, _, _ := syscall.SyscallN(
+		tra.VTable().Get_Length,
+		uintptr(unsafe.Pointer(tra)),
+		uintptr(unsafe.Pointer(&length)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return length, nil
+}
+
+func (tra *UIAutomationTextRangeArray) GetElement(index int32) (*UIAutomationTextRange, error) {
+	var textRange *UIAutomationTextRange
+
+	hr, _, _ := syscall.SyscallN(
+		tra.VTable().GetElement,
+		uintptr(unsafe.Pointer(tra)),
+		uintptr(index),
+		uintptr(unsafe.Pointer(&textRange)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return textRange, nil
+}
+
+type UIAutomationTextRange struct {
+	ole.IUnknown
+}
+
+type UIAutomationTextRangeVtbl struct {
+	ole.IUnknownVtbl
+	Clone                 uintptr
+	Compare               uintptr
+	CompareEndpoints      uintptr
+	ExpandToEnclosingUnit uintptr
+	FindAttribute         uintptr
+	FindText              uintptr
+	GetAttributeValue     uintptr
+	GetBoundingRectangles uintptr
+	GetEnclosingElement   uintptr
+	GetText               uintptr
+	Move                  uintptr
+	MoveEndpointByUnit    uintptr
+	MoveEndpointByRange   uintptr
+	Select                uintptr
+	AddToSelection        uintptr
+	RemoveFromSelection   uintptr
+	ScrollIntoView        uintptr
+	GetChildren           uintptr
+}
+
+func (tr *UIAutomationTextRange) VTable() *UIAutomationTextRangeVtbl {
+	return (*UIAutomationTextRangeVtbl)(unsafe.Pointer(tr.RawVTable))
+}
+
+func (tr *UIAutomationTextRange) GetBoundingRectangles() ([]Rect, error) {
+	var arr *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		tr.VTable().GetBoundingRectangles,
+		uintptr(unsafe.Pointer(tr)),
+		uintptr(unsafe.Pointer(&arr)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	conversion := ole.SafeArrayConversion{Array: arr}
+	defer conversion.Release()
+
+	floats := conversion.ToValueArray()
+
+	rects := make([]Rect, len(floats)/4)
+	for i := 0; i < len(floats)/4; i++ {
+		rects[i] = Rect{
+			Left:   uint32(floats[i*4].(float64)),
+			Top:    uint32(floats[i*4+1].(float64)),
+			Right:  uint32(floats[i*4].(float64)) + uint32(floats[i*4+2].(float64)),
+			Bottom: uint32(floats[i*4+1].(float64)) + uint32(floats[i*4+3].(float64)),
+		}
+	}
+
+	return rects, nil
+}
+
+func (tr *UIAutomationTextRange) GetText(maxLength int32) (string, error) {
+	var text *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		tr.VTable().GetText,
+		uintptr(unsafe.Pointer(tr)),
+		uintptr(maxLength),
+		uintptr(unsafe.Pointer(&text)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(text), nil
+}
