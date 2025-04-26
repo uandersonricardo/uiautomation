@@ -2,7 +2,8 @@ package uiautomation
 
 import (
 	"unsafe"
-
+	"syscall"
+	
 	"github.com/go-ole/go-ole"
 )
 
@@ -45,7 +46,12 @@ type UIAutomationLegacyAccessiblePattern struct {
 
 type UIAutomationLegacyAccessiblePatternVtbl struct {
 	ole.IUnknownVtbl
+	Select                      uintptr
 	DoDefaultAction             uintptr
+	SetValue                    uintptr
+	Get_CurrentName             uintptr
+	Get_CurrentValue            uintptr
+	Get_CurrentChildId          uintptr
 	Get_CachedChildId           uintptr
 	Get_CachedDefaultAction     uintptr
 	Get_CachedDescription       uintptr
@@ -55,22 +61,30 @@ type UIAutomationLegacyAccessiblePatternVtbl struct {
 	Get_CachedRole              uintptr
 	Get_CachedState             uintptr
 	Get_CachedValue             uintptr
-	Get_CurrentChildId          uintptr
 	Get_CurrentDefaultAction    uintptr
 	Get_CurrentDescription      uintptr
 	Get_CurrentHelp             uintptr
 	Get_CurrentKeyboardShortcut uintptr
-	Get_CurrentName             uintptr
 	Get_CurrentRole             uintptr
 	Get_CurrentState            uintptr
-	Get_CurrentValue            uintptr
 	GetCachedSelection          uintptr
 	GetCurrentSelection         uintptr
 	GetAccessible               uintptr
-	Select                      uintptr
-	SetValue                    uintptr
 }
 
 func (lap *UIAutomationLegacyAccessiblePattern) VTable() *UIAutomationLegacyAccessiblePatternVtbl {
 	return (*UIAutomationLegacyAccessiblePatternVtbl)(unsafe.Pointer(lap.RawVTable))
+}
+
+func (lap *UIAutomationLegacyAccessiblePattern) DoDefaultAction() error {
+	hr, _, _ := syscall.SyscallN(
+		lap.VTable().DoDefaultAction,
+		uintptr(unsafe.Pointer(lap)),
+	)
+
+	if hr != ole.S_OK {
+		return ole.NewError(hr)
+	}
+
+	return nil
 }
