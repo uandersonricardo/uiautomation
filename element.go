@@ -114,6 +114,33 @@ func (elem *UIAutomationElement) SetFocus() error {
 	return nil
 }
 
+func (elem *UIAutomationElement) SetValue(value string) error {
+	valuePattern, err := elem.GetValuePattern()
+	if err != nil {
+		return err
+	}
+	defer valuePattern.Release()
+	return valuePattern.SetValue(value)
+}
+
+func (elem *UIAutomationElement) Invoke() error {
+	invokePattern, err := elem.GetInvokePattern()
+	if err != nil {
+		return err
+	}
+	defer invokePattern.Release()
+	return invokePattern.Invoke()
+}
+
+func (elem *UIAutomationElement) DoDefaultAction() error {
+	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
+	if err != nil {
+		return err
+	}
+	defer legacyAccessiblePattern.Release()
+	return legacyAccessiblePattern.DoDefaultAction()
+}
+
 func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
 	var patternObject *ole.IUnknown
 
