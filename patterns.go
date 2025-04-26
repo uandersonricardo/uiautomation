@@ -147,3 +147,30 @@ func (pat *UIAutomationValuePattern) CurrentIsReadonly() (bool, error) {
 
 	return readonly, nil
 }
+
+type UIAutomationInvokePattern struct {
+	ole.IUnknown
+}
+
+type UIAutomationInvokePatternVtbl struct {
+	ole.IUnknownVtbl
+	Invoke uintptr
+}
+
+func (pat *UIAutomationInvokePattern) VTable() *UIAutomationInvokePatternVtbl {
+	return (*UIAutomationInvokePatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *UIAutomationInvokePattern) Invoke() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Invoke,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
