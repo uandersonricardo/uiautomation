@@ -114,6 +114,35 @@ func (elem *UIAutomationElement) SetFocus() error {
 	return nil
 }
 
+func (elem *UIAutomationElement) SetValue(value string) error {
+	valuePattern, err := elem.GetValuePattern()
+	if err != nil {
+		return err
+	}
+	defer valuePattern.Release()
+	return valuePattern.SetValue(value)
+}
+
+func (elem *UIAutomationElement) Invoke() error {
+	invokePattern, err := elem.GetInvokePattern()
+	if err != nil {
+		return err
+	}
+	invokePattern.Invoke()
+	invokePattern.Release()
+	return nil
+}
+
+func (elem *UIAutomationElement) DoDefaultAction() error {
+	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
+	if err != nil {
+		return err
+	}
+	legacyAccessiblePattern.DoDefaultAction()
+	legacyAccessiblePattern.Release()
+	return nil
+}
+
 func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
 	var patternObject *ole.IUnknown
 
@@ -129,6 +158,38 @@ func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IU
 	}
 
 	return patternObject, nil
+}
+
+func (elem *UIAutomationElement) GetInvokePattern() (*UIAutomationInvokePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(InvokePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	invokePattern, err := patternObject.QueryInterface(IID_IUIAutomationInvokePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationInvokePattern)(unsafe.Pointer(invokePattern)), nil
+}
+
+func (elem *UIAutomationElement) GetLegacyAccessiblePattern() (*UIAutomationLegacyAccessiblePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(LegacyIAccessiblePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	legacyAccessiblePattern, err := patternObject.QueryInterface(IID_IUIAutomationLegacyIAccessiblePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationLegacyAccessiblePattern)(unsafe.Pointer(legacyAccessiblePattern)), nil
 }
 
 func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, error) {
@@ -288,6 +349,24 @@ func (elem *UIAutomationElement) CurrentPropertyValue(propertyId PropertyId) (ol
 	}
 
 	return retVal, nil
+}
+
+func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomationCondition) (*UIAutomationElement, error) {
+	var found *UIAutomationElement
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindFirst,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&found)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return found, nil
 }
 
 type UIAutomationElementArray struct {
