@@ -131,6 +131,22 @@ func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IU
 	return patternObject, nil
 }
 
+func (elem *UIAutomationElement) GetInvokePattern() (*UIAutomationInvokePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(InvokePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	invokePattern, err := patternObject.QueryInterface(IID_IUIAutomationInvokePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationInvokePattern)(unsafe.Pointer(invokePattern)), nil
+}
+
 func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, error) {
 	patternObject, err := elem.GetCurrentPattern(TextPatternId)
 
