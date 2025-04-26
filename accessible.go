@@ -2,7 +2,8 @@ package uiautomation
 
 import (
 	"unsafe"
-
+	"syscall"
+	
 	"github.com/go-ole/go-ole"
 )
 
@@ -73,4 +74,17 @@ type UIAutomationLegacyAccessiblePatternVtbl struct {
 
 func (lap *UIAutomationLegacyAccessiblePattern) VTable() *UIAutomationLegacyAccessiblePatternVtbl {
 	return (*UIAutomationLegacyAccessiblePatternVtbl)(unsafe.Pointer(lap.RawVTable))
+}
+
+func (lap *UIAutomationLegacyAccessiblePattern) DoDefaultAction() error {
+	hr, _, _ := syscall.SyscallN(
+		lap.VTable().DoDefaultAction,
+		uintptr(unsafe.Pointer(lap)),
+	)
+
+	if hr != ole.S_OK {
+		return ole.NewError(hr)
+	}
+
+	return nil
 }
