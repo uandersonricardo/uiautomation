@@ -290,6 +290,24 @@ func (elem *UIAutomationElement) CurrentPropertyValue(propertyId PropertyId) (ol
 	return retVal, nil
 }
 
+func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomationCondition) (*UIAutomationElement, error) {
+	var found *UIAutomationElement
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindFirst,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&found)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return found, nil
+}
+
 type UIAutomationElementArray struct {
 	ole.IUnknown
 }
