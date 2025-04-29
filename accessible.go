@@ -1,9 +1,9 @@
 package uiautomation
 
 import (
-	"unsafe"
 	"syscall"
-	
+	"unsafe"
+
 	"github.com/go-ole/go-ole"
 )
 

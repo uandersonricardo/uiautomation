@@ -1,6 +1,7 @@
 package uiautomation
 
 import (
+	"errors"
 	"syscall"
 	"unsafe"
 
@@ -98,23 +99,30 @@ type UIAutomationElementVtbl struct {
 }
 
 func (elem *UIAutomationElement) VTable() *UIAutomationElementVtbl {
+	if elem == nil {
+		return nil
+	}
 	return (*UIAutomationElementVtbl)(unsafe.Pointer(elem.RawVTable))
 }
 
 func (elem *UIAutomationElement) SetFocus() error {
+	if elem == nil {
+		return errors.New("uiautomation: element is nil")
+	}
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().SetFocus,
 		uintptr(unsafe.Pointer(elem)),
 	)
-
 	if hr != 0 {
 		return ole.NewError(hr)
 	}
-
 	return nil
 }
 
 func (elem *UIAutomationElement) SetValue(value string) error {
+	if elem == nil {
+		return errors.New("uiautomation: element is nil")
+	}
 	valuePattern, err := elem.GetValuePattern()
 	if err != nil {
 		return err
@@ -124,6 +132,9 @@ func (elem *UIAutomationElement) SetValue(value string) error {
 }
 
 func (elem *UIAutomationElement) Invoke() error {
+	if elem == nil {
+		return errors.New("uiautomation: element is nil")
+	}
 	invokePattern, err := elem.GetInvokePattern()
 	if err != nil {
 		return err
@@ -133,6 +144,9 @@ func (elem *UIAutomationElement) Invoke() error {
 }
 
 func (elem *UIAutomationElement) DoDefaultAction() error {
+	if elem == nil {
+		return errors.New("uiautomation: element is nil")
+	}
 	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
 	if err != nil {
 		return err
@@ -142,216 +156,215 @@ func (elem *UIAutomationElement) DoDefaultAction() error {
 }
 
 func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	var patternObject *ole.IUnknown
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPattern,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(patternId),
 		uintptr(unsafe.Pointer(&patternObject)),
 	)
-
 	if hr != 0 {
 		return nil, ole.NewError(hr)
 	}
-
 	return patternObject, nil
 }
 
 func (elem *UIAutomationElement) GetInvokePattern() (*UIAutomationInvokePattern, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	patternObject, err := elem.GetCurrentPattern(InvokePatternId)
-
 	if err != nil {
 		return nil, err
 	}
-
 	invokePattern, err := patternObject.QueryInterface(IID_IUIAutomationInvokePattern)
-
 	if err != nil {
 		return nil, err
 	}
-
 	return (*UIAutomationInvokePattern)(unsafe.Pointer(invokePattern)), nil
 }
 
 func (elem *UIAutomationElement) GetLegacyAccessiblePattern() (*UIAutomationLegacyAccessiblePattern, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	patternObject, err := elem.GetCurrentPattern(LegacyIAccessiblePatternId)
-
 	if err != nil {
 		return nil, err
 	}
-
 	legacyAccessiblePattern, err := patternObject.QueryInterface(IID_IUIAutomationLegacyIAccessiblePattern)
-
 	if err != nil {
 		return nil, err
 	}
-
 	return (*UIAutomationLegacyAccessiblePattern)(unsafe.Pointer(legacyAccessiblePattern)), nil
 }
 
 func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	patternObject, err := elem.GetCurrentPattern(TextPatternId)
-
 	if err != nil {
 		return nil, err
 	}
-
 	textPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextPattern)
-
 	if err != nil {
 		return nil, err
 	}
-
 	return (*UIAutomationTextPattern)(unsafe.Pointer(textPattern)), nil
 }
 
 func (elem *UIAutomationElement) GetValuePattern() (*UIAutomationValuePattern, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	patternObject, err := elem.GetCurrentPattern(ValuePatternId)
-
 	if err != nil {
 		return nil, err
 	}
-
 	valuePattern, err := patternObject.QueryInterface(IID_IUIAutomationValuePattern)
-
 	if err != nil {
 		return nil, err
 	}
-
 	return (*UIAutomationValuePattern)(unsafe.Pointer(valuePattern)), nil
 }
 
 func (elem *UIAutomationElement) CurrentControlType() (ControlTypeId, error) {
+	if elem == nil {
+		return 0, errors.New("uiautomation: element is nil")
+	}
 	var retVal ControlTypeId
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentControlType,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return 0, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
 
 func (elem *UIAutomationElement) CurrentControlTypeName() (string, error) {
+	if elem == nil {
+		return "", errors.New("uiautomation: element is nil")
+	}
 	controlTypeId, err := elem.CurrentControlType()
-
 	if err != nil {
 		return "", err
 	}
-
 	controlTypeName := ControlTypeNameFromId(controlTypeId)
 
 	return controlTypeName, nil
 }
 
 func (elem *UIAutomationElement) CurrentName() (string, error) {
+	if elem == nil {
+		return "", errors.New("uiautomation: element is nil")
+	}
 	var retVal *uint16
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentName,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return "", ole.NewError(hr)
 	}
-
 	return ole.BstrToString(retVal), nil
 }
 
 func (elem *UIAutomationElement) CurrentAutomationId() (string, error) {
+	if elem == nil {
+		return "", errors.New("uiautomation: element is nil")
+	}
 	var retVal *uint16
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentAutomationId,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return "", ole.NewError(hr)
 	}
-
 	return ole.BstrToString(retVal), nil
 }
 
 func (elem *UIAutomationElement) CurrentClassName() (string, error) {
+	if elem == nil {
+		return "", errors.New("uiautomation: element is nil")
+	}
 	var retVal *uint16
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentClassName,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return "", ole.NewError(hr)
 	}
-
 	return ole.BstrToString(retVal), nil
 }
 
 func (elem *UIAutomationElement) CurrentNativeWindowHandle() (syscall.Handle, error) {
+	if elem == nil {
+		return 0, errors.New("uiautomation: element is nil")
+	}
 	var retVal syscall.Handle
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentNativeWindowHandle,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return 0, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
 
 func (elem *UIAutomationElement) CurrentBoundingRectangle() (Rect, error) {
+	if elem == nil {
+		return Rect{}, errors.New("uiautomation: element is nil")
+	}
 	var retVal Rect
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().Get_CurrentBoundingRectangle,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return Rect{}, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
 
 func (elem *UIAutomationElement) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, error) {
+	if elem == nil {
+		var zero ole.VARIANT
+		return zero, errors.New("uiautomation: element is nil")
+	}
 	var retVal ole.VARIANT
-
 	ole.VariantInit(&retVal)
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPropertyValue,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(propertyId),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return retVal, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
 
 func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomationCondition) (*UIAutomationElement, error) {
+	if elem == nil {
+		return nil, errors.New("uiautomation: element is nil")
+	}
 	var found *UIAutomationElement
-
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().FindFirst,
 		uintptr(unsafe.Pointer(elem)),
@@ -359,11 +372,9 @@ func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomat
 		uintptr(unsafe.Pointer(condition)),
 		uintptr(unsafe.Pointer(&found)),
 	)
-
 	if hr != 0 {
 		return nil, ole.NewError(hr)
 	}
-
 	return found, nil
 }
 
@@ -378,38 +389,41 @@ type UIAutomationElementArrayVtbl struct {
 }
 
 func (arr *UIAutomationElementArray) VTable() *UIAutomationElementArrayVtbl {
+	if arr == nil {
+		return nil
+	}
 	return (*UIAutomationElementArrayVtbl)(unsafe.Pointer(arr.RawVTable))
 }
 
 func (arr *UIAutomationElementArray) Length() (int32, error) {
+	if arr == nil {
+		return 0, errors.New("uiautomation: element array is nil")
+	}
 	var retVal int32
-
 	hr, _, _ := syscall.SyscallN(
 		arr.VTable().Get_Length,
 		uintptr(unsafe.Pointer(arr)),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return 0, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
 
 func (arr *UIAutomationElementArray) GetElement(index int32) (*UIAutomationElement, error) {
+	if arr == nil {
+		return nil, errors.New("uiautomation: element array is nil")
+	}
 	var retVal *UIAutomationElement
-
 	hr, _, _ := syscall.SyscallN(
 		arr.VTable().GetElement,
 		uintptr(unsafe.Pointer(arr)),
 		uintptr(index),
 		uintptr(unsafe.Pointer(&retVal)),
 	)
-
 	if hr != 0 {
 		return nil, ole.NewError(hr)
 	}
-
 	return retVal, nil
 }
