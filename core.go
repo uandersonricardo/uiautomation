@@ -66,6 +66,23 @@ func (walker *UIAutomationTreeWalker) GetNextSiblingElement(element *UIAutomatio
 	return next, nil
 }
 
+func (walker *UIAutomationTreeWalker) GetParentElement(element *UIAutomationElement) (*UIAutomationElement, error) {
+	var parent *UIAutomationElement
+
+	hr, _, _ := syscall.SyscallN(
+		walker.VTable().GetParentElement,
+		uintptr(unsafe.Pointer(walker)),
+		uintptr(unsafe.Pointer(element)),
+		uintptr(unsafe.Pointer(&parent)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return parent, nil
+}
+
 type UIAutomationCacheRequest struct {
 	ole.IUnknown
 }
