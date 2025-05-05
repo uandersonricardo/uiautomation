@@ -45,6 +45,32 @@ const (
 	WindowPatternId            PatternId = 10009
 )
 
+type UIScrollItemPattern struct {
+	ole.IUnknown
+}
+
+type UIScrollItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	ScrollIntoView uintptr
+}
+
+func (pat *UIScrollItemPattern) VTable() *UIScrollItemPatternVtbl {
+	return (*UIScrollItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *UIScrollItemPattern) ScrollIntoView() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().ScrollIntoView,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
 type UIAutomationTextPattern struct {
 	ole.IUnknown
 }
@@ -243,4 +269,196 @@ func (pat *UIAutomationWindowPattern) SetWindowVisualState(state WindowVisualSta
 	}
 
 	return nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentCanMaximize() (bool, error) {
+	var canMaximize bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentCanMaximize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canMaximize)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canMaximize, nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentCanMinimize() (bool, error) {
+	var canMinimize bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentCanMinimize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canMinimize)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canMinimize, nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentIsModal() (bool, error) {
+	var isModal bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsModal,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isModal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isModal, nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentIsTopmost() (bool, error) {
+	var isTopmost bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsTopmost,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isTopmost)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isTopmost, nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentWindowVisualState() (WindowVisualState, error) {
+	var state WindowVisualState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentWindowVisualState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
+}
+
+func (pat *UIAutomationWindowPattern) CurrentWindowInteractionState() (WindowInteractionState, error) {
+	var state WindowInteractionState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentWindowInteractionState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedCanMaximize() (bool, error) {
+	var canMaximize bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCanMaximize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canMaximize)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canMaximize, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedCanMinimize() (bool, error) {
+	var canMinimize bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCanMinimize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canMinimize)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canMinimize, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedIsModal() (bool, error) {
+	var isModal bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsModal,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isModal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isModal, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedIsTopmost() (bool, error) {
+	var isTopmost bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsTopmost,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isTopmost)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isTopmost, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedWindowVisualState() (WindowVisualState, error) {
+	var state WindowVisualState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedWindowVisualState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
+}
+
+func (pat *UIAutomationWindowPattern) CachedWindowInteractionState() (WindowInteractionState, error) {
+	var state WindowInteractionState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedWindowInteractionState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
 }
