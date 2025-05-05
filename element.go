@@ -222,6 +222,22 @@ func (elem *UIAutomationElement) GetValuePattern() (*UIAutomationValuePattern, e
 	return (*UIAutomationValuePattern)(unsafe.Pointer(valuePattern)), nil
 }
 
+func (elem *UIAutomationElement) GetWindowPattern() (*UIAutomationWindowPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(WindowPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	windowPattern, err := patternObject.QueryInterface(IID_IUIAutomationWindowPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*UIAutomationWindowPattern)(unsafe.Pointer(windowPattern)), nil
+}
+
 func (elem *UIAutomationElement) CurrentControlType() (ControlTypeId, error) {
 	var retVal ControlTypeId
 

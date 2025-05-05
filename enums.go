@@ -30,3 +30,21 @@ const (
 	StructureChangeTypeChildrenBulkRemoved
 	StructureChangeTypeChildrenReordered
 )
+
+type WindowVisualState uint32
+
+const (
+	WindowVisualStateNormal WindowVisualState = iota
+	WindowVisualStateMaximized
+	WindowVisualStateMinimized
+)
+
+type WindowInteractionState uint32
+
+const (
+	WindowInteractionStateRunning WindowInteractionState = iota
+	WindowInteractionStateClosing
+	WindowInteractionStateReadyForUserInteraction
+	WindowInteractionStateBlockedByModalWindow
+	WindowInteractionStateNotResponding
+)

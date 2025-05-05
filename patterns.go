@@ -174,3 +174,73 @@ func (pat *UIAutomationInvokePattern) Invoke() error {
 	return nil
 }
 
+type UIAutomationWindowPattern struct {
+	ole.IUnknown
+}
+
+type UIAutomationWindowPatternVtbl struct {
+	ole.IUnknownVtbl
+	Close                             uintptr
+	WaitForInputIdle                  uintptr
+	SetWindowVisualState              uintptr
+	Get_CurrentCanMaximize            uintptr
+	Get_CurrentCanMinimize            uintptr
+	Get_CurrentIsModal                uintptr
+	Get_CurrentIsTopmost              uintptr
+	Get_CurrentWindowVisualState      uintptr
+	Get_CurrentWindowInteractionState uintptr
+	Get_CachedCanMaximize             uintptr
+	Get_CachedCanMinimize             uintptr
+	Get_CachedIsModal                 uintptr
+	Get_CachedIsTopmost               uintptr
+	Get_CachedWindowVisualState       uintptr
+	Get_CachedWindowInteractionState  uintptr
+}
+
+func (pat *UIAutomationWindowPattern) VTable() *UIAutomationWindowPatternVtbl {
+	return (*UIAutomationWindowPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *UIAutomationWindowPattern) Close() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Close,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *UIAutomationWindowPattern) WaitForInputIdle(milliseconds int32) (bool, error) {
+	var success bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().WaitForInputIdle,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(milliseconds),
+		uintptr(unsafe.Pointer(&success)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return success, nil
+}
+
+func (pat *UIAutomationWindowPattern) SetWindowVisualState(state WindowVisualState) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().SetWindowVisualState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(state),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
