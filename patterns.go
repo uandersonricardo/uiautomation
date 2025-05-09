@@ -71,6 +71,120 @@ func (pat *InvokePattern) Invoke() error {
 	return nil
 }
 
+type SelectionPattern struct {
+	ole.IUnknown
+}
+
+type SelectionPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetCurrentSelection            uintptr
+	Get_CurrentCanSelectMultiple   uintptr
+	Get_CurrentIsSelectionRequired uintptr
+	GetCachedSelection             uintptr
+	Get_CachedCanSelectMultiple    uintptr
+	Get_CachedIsSelectionRequired  uintptr
+}
+
+func (pat *SelectionPattern) VTable() *SelectionPatternVtbl {
+	return (*SelectionPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *SelectionPattern) GetCurrentSelection() (*ElementArray, error) {
+	var selection *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentSelection,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&selection)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return selection, nil
+}
+
+func (pat *SelectionPattern) CurrentCanSelectMultiple() (bool, error) {
+	var canSelectMultiple bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentCanSelectMultiple,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canSelectMultiple)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canSelectMultiple, nil
+}
+
+func (pat *SelectionPattern) CurrentIsSelectionRequired() (bool, error) {
+	var isSelectionRequired bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsSelectionRequired,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isSelectionRequired)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isSelectionRequired, nil
+}
+
+func (pat *SelectionPattern) GetCachedSelection() (*ElementArray, error) {
+	var selection *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedSelection,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&selection)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return selection, nil
+}
+
+func (pat *SelectionPattern) CachedCanSelectMultiple() (bool, error) {
+	var canSelectMultiple bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCanSelectMultiple,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canSelectMultiple)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canSelectMultiple, nil
+}
+
+func (pat *SelectionPattern) CachedIsSelectionRequired() (bool, error) {
+	var isSelectionRequired bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsSelectionRequired,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isSelectionRequired)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isSelectionRequired, nil
+}
+
 type ValuePattern struct {
 	ole.IUnknown
 }
@@ -138,6 +252,269 @@ func (pat *ValuePattern) CurrentIsReadonly() (bool, error) {
 	}
 
 	return readonly, nil
+}
+
+func (pat *ValuePattern) CachedValue() (string, error) {
+	var value *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedValue,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&value)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(value), nil
+}
+
+func (pat *ValuePattern) CachedIsReadonly() (bool, error) {
+	var readonly bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCachedIsReadOnly,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&readonly)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return readonly, nil
+}
+
+type RangeValuePattern struct {
+	ole.IUnknown
+}
+
+type RangeValuePatternVtbl struct {
+	ole.IUnknownVtbl
+	SetValue               uintptr
+	Get_CurrentValue       uintptr
+	Get_CurrentIsReadOnly  uintptr
+	Get_CurrentMaximum     uintptr
+	Get_CurrentMinimum     uintptr
+	Get_CurrentLargeChange uintptr
+	Get_CurrentSmallChange uintptr
+	Get_CachedValue        uintptr
+	Get_CachedIsReadOnly   uintptr
+	Get_CachedMaximum      uintptr
+	Get_CachedMinimum      uintptr
+	Get_CachedLargeChange  uintptr
+	Get_CachedSmallChange  uintptr
+}
+
+func (pat *RangeValuePattern) VTable() *RangeValuePatternVtbl {
+	return (*RangeValuePatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *RangeValuePattern) SetValue(value float64) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().SetValue,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(value),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *RangeValuePattern) CurrentValue() (float64, error) {
+	var value float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentValue,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&value)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (pat *RangeValuePattern) CurrentIsReadOnly() (bool, error) {
+	var readonly bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsReadOnly,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&readonly)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return readonly, nil
+}
+
+func (pat *RangeValuePattern) CurrentMaximum() (float64, error) {
+	var max float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentMaximum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&max)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return max, nil
+}
+
+func (pat *RangeValuePattern) CurrentMinimum() (float64, error) {
+	var min float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentMinimum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&min)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return min, nil
+}
+
+func (pat *RangeValuePattern) CurrentLargeChange() (float64, error) {
+	var largeChange float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentLargeChange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&largeChange)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return largeChange, nil
+}
+
+func (pat *RangeValuePattern) CurrentSmallChange() (float64, error) {
+	var smallChange float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentSmallChange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&smallChange)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return smallChange, nil
+}
+
+func (pat *RangeValuePattern) CachedValue() (float64, error) {
+	var value float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedValue,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&value)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (pat *RangeValuePattern) CachedIsReadOnly() (bool, error) {
+	var readonly bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsReadOnly,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&readonly)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return readonly, nil
+}
+
+func (pat *RangeValuePattern) CachedMaximum() (float64, error) {
+	var max float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedMaximum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&max)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return max, nil
+}
+
+func (pat *RangeValuePattern) CachedMinimum() (float64, error) {
+	var min float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedMinimum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&min)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return min, nil
+}
+
+func (pat *RangeValuePattern) CachedLargeChange() (float64, error) {
+	var largeChange float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedLargeChange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&largeChange)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return largeChange, nil
+}
+
+func (pat *RangeValuePattern) CachedSmallChange() (float64, error) {
+	var smallChange float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedSmallChange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&smallChange)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return smallChange, nil
 }
 
 type WindowPattern struct {
