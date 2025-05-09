@@ -517,6 +517,328 @@ func (pat *RangeValuePattern) CachedSmallChange() (float64, error) {
 	return smallChange, nil
 }
 
+type ScrollPattern struct {
+	ole.IUnknown
+}
+
+type ScrollPatternVtbl struct {
+	ole.IUnknownVtbl
+	Scroll                             uintptr
+	SetScrollPercent                   uintptr
+	Get_CurrentHorizontalScrollPercent uintptr
+	Get_CurrentVerticalScrollPercent   uintptr
+	Get_CurrentHorizontalViewSize      uintptr
+	Get_CurrentVerticalViewSize        uintptr
+	Get_CurrentHorizontallyScrollable  uintptr
+	Get_CurrentVerticallyScrollable    uintptr
+	Get_CachedHorizontalScrollPercent  uintptr
+	Get_CachedVerticalScrollPercent    uintptr
+	Get_CachedHorizontalViewSize       uintptr
+	Get_CachedVerticalViewSize         uintptr
+	Get_CachedHorizontallyScrollable   uintptr
+	Get_CachedVerticallyScrollable     uintptr
+}
+
+func (pat *ScrollPattern) VTable() *ScrollPatternVtbl {
+	return (*ScrollPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *ScrollPattern) Scroll(horizontalAmount, verticalAmount ScrollAmount) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Scroll,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(horizontalAmount),
+		uintptr(verticalAmount),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *ScrollPattern) SetScrollPercent(horizontalPercent, verticalPercent float64) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().SetScrollPercent,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(horizontalPercent),
+		uintptr(verticalPercent),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *ScrollPattern) CurrentHorizontalScrollPercent() (float64, error) {
+	var percent float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentHorizontalScrollPercent,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&percent)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return percent, nil
+}
+
+func (pat *ScrollPattern) CurrentVerticalScrollPercent() (float64, error) {
+	var percent float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentVerticalScrollPercent,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&percent)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return percent, nil
+}
+
+func (pat *ScrollPattern) CurrentHorizontalViewSize() (float64, error) {
+	var size float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentHorizontalViewSize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&size)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return size, nil
+}
+
+func (pat *ScrollPattern) CurrentVerticalViewSize() (float64, error) {
+	var size float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentVerticalViewSize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&size)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return size, nil
+}
+
+func (pat *ScrollPattern) CurrentHorizontallyScrollable() (bool, error) {
+	var scrollable bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentHorizontallyScrollable,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&scrollable)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return scrollable, nil
+}
+
+func (pat *ScrollPattern) CurrentVerticallyScrollable() (bool, error) {
+	var scrollable bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentVerticallyScrollable,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&scrollable)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return scrollable, nil
+}
+
+func (pat *ScrollPattern) CachedHorizontalScrollPercent() (float64, error) {
+	var percent float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedHorizontalScrollPercent,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&percent)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return percent, nil
+}
+
+func (pat *ScrollPattern) CachedVerticalScrollPercent() (float64, error) {
+	var percent float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedVerticalScrollPercent,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&percent)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return percent, nil
+}
+
+func (pat *ScrollPattern) CachedHorizontalViewSize() (float64, error) {
+	var size float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedHorizontalViewSize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&size)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return size, nil
+}
+
+func (pat *ScrollPattern) CachedVerticalViewSize() (float64, error) {
+	var size float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedVerticalViewSize,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&size)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return size, nil
+}
+
+func (pat *ScrollPattern) CachedHorizontallyScrollable() (bool, error) {
+	var scrollable bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedHorizontallyScrollable,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&scrollable)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return scrollable, nil
+}
+
+func (pat *ScrollPattern) CachedVerticallyScrollable() (bool, error) {
+	var scrollable bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedVerticallyScrollable,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&scrollable)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return scrollable, nil
+}
+
+type ExpandCollapsePattern struct {
+	ole.IUnknown
+}
+
+type ExpandCollapsePatternVtbl struct {
+	ole.IUnknownVtbl
+	Expand                         uintptr
+	Collapse                       uintptr
+	Get_CurrentExpandCollapseState uintptr
+	Get_CachedExpandCollapseState  uintptr
+}
+
+func (pat *ExpandCollapsePattern) VTable() *ExpandCollapsePatternVtbl {
+	return (*ExpandCollapsePatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *ExpandCollapsePattern) Expand() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Expand,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *ExpandCollapsePattern) Collapse() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Collapse,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *ExpandCollapsePattern) CurrentExpandCollapseState() (ExpandCollapseState, error) {
+	var state ExpandCollapseState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentExpandCollapseState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
+}
+
+func (pat *ExpandCollapsePattern) CachedExpandCollapseState() (ExpandCollapseState, error) {
+	var state ExpandCollapseState
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedExpandCollapseState,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&state)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return state, nil
+}
+
 type WindowPattern struct {
 	ole.IUnknown
 }
