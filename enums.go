@@ -48,3 +48,22 @@ const (
 	WindowInteractionStateBlockedByModalWindow
 	WindowInteractionStateNotResponding
 )
+
+type ScrollAmount uint32
+
+const (
+	ScrollAmountLargeDecrement ScrollAmount = iota
+	ScrollAmountSmallDecrement
+	ScrollAmountNoAmount
+	ScrollAmountLargeIncrement
+	ScrollAmountSmallIncrement
+)
+
+type ExpandCollapseState uint32
+
+const (
+	ExpandCollapseStateCollapsed ExpandCollapseState = iota
+	ExpandCollapseStateExpanded
+	ExpandCollapseStatePartiallyExpanded
+	ExpandCollapseStateLeafNode
+)
