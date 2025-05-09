@@ -7,11 +7,11 @@ import (
 	"github.com/go-ole/go-ole"
 )
 
-type UIAutomationTreeWalker struct {
+type TreeWalker struct {
 	ole.IUnknown
 }
 
-type UIAutomationTreeWalkerVtbl struct {
+type TreeWalkerVtbl struct {
 	ole.IUnknownVtbl
 	GetParentElement                    uintptr
 	GetFirstChildElement                uintptr
@@ -28,12 +28,12 @@ type UIAutomationTreeWalkerVtbl struct {
 	Get_Condition                       uintptr
 }
 
-func (walker *UIAutomationTreeWalker) VTable() *UIAutomationTreeWalkerVtbl {
-	return (*UIAutomationTreeWalkerVtbl)(unsafe.Pointer(walker.RawVTable))
+func (walker *TreeWalker) VTable() *TreeWalkerVtbl {
+	return (*TreeWalkerVtbl)(unsafe.Pointer(walker.RawVTable))
 }
 
-func (walker *UIAutomationTreeWalker) GetFirstChildElement(element *UIAutomationElement) (*UIAutomationElement, error) {
-	var first *UIAutomationElement
+func (walker *TreeWalker) GetFirstChildElement(element *Element) (*Element, error) {
+	var first *Element
 
 	hr, _, _ := syscall.SyscallN(
 		walker.VTable().GetFirstChildElement,
@@ -49,8 +49,8 @@ func (walker *UIAutomationTreeWalker) GetFirstChildElement(element *UIAutomation
 	return first, nil
 }
 
-func (walker *UIAutomationTreeWalker) GetNextSiblingElement(element *UIAutomationElement) (*UIAutomationElement, error) {
-	var next *UIAutomationElement
+func (walker *TreeWalker) GetNextSiblingElement(element *Element) (*Element, error) {
+	var next *Element
 
 	hr, _, _ := syscall.SyscallN(
 		walker.VTable().GetNextSiblingElement,
@@ -66,8 +66,8 @@ func (walker *UIAutomationTreeWalker) GetNextSiblingElement(element *UIAutomatio
 	return next, nil
 }
 
-func (walker *UIAutomationTreeWalker) GetParentElement(element *UIAutomationElement) (*UIAutomationElement, error) {
-	var parent *UIAutomationElement
+func (walker *TreeWalker) GetParentElement(element *Element) (*Element, error) {
+	var parent *Element
 
 	hr, _, _ := syscall.SyscallN(
 		walker.VTable().GetParentElement,
@@ -83,11 +83,11 @@ func (walker *UIAutomationTreeWalker) GetParentElement(element *UIAutomationElem
 	return parent, nil
 }
 
-type UIAutomationCacheRequest struct {
+type CacheRequest struct {
 	ole.IUnknown
 }
 
-type UIAutomationCacheRequestVtbl struct {
+type CacheRequestVtbl struct {
 	ole.IUnknownVtbl
 	AddProperty               uintptr
 	AddPattern                uintptr
@@ -100,25 +100,25 @@ type UIAutomationCacheRequestVtbl struct {
 	Put_AutomationElementMode uintptr
 }
 
-func (cr *UIAutomationCacheRequest) VTable() *UIAutomationCacheRequestVtbl {
-	return (*UIAutomationCacheRequestVtbl)(unsafe.Pointer(cr.RawVTable))
+func (cr *CacheRequest) VTable() *CacheRequestVtbl {
+	return (*CacheRequestVtbl)(unsafe.Pointer(cr.RawVTable))
 }
 
-type UIAutomationProxyFactory struct {
+type ProxyFactory struct {
 	ole.IUnknown
 }
 
-type UIAutomationProxyFactoryVtbl struct {
+type ProxyFactoryVtbl struct {
 	ole.IUnknownVtbl
 	CreateProvider     uintptr
 	Get_ProxyFactoryId uintptr
 }
 
-func (pf *UIAutomationProxyFactory) VTable() *UIAutomationProxyFactoryVtbl {
-	return (*UIAutomationProxyFactoryVtbl)(unsafe.Pointer(pf.RawVTable))
+func (pf *ProxyFactory) VTable() *ProxyFactoryVtbl {
+	return (*ProxyFactoryVtbl)(unsafe.Pointer(pf.RawVTable))
 }
 
-func (pf *UIAutomationProxyFactory) CreateProvider(hwnd syscall.Handle, idObject, idChild int32) (*RawElementProviderSimple, error) {
+func (pf *ProxyFactory) CreateProvider(hwnd syscall.Handle, idObject, idChild int32) (*RawElementProviderSimple, error) {
 	var provider *RawElementProviderSimple
 
 	hr, _, _ := syscall.SyscallN(
@@ -137,7 +137,7 @@ func (pf *UIAutomationProxyFactory) CreateProvider(hwnd syscall.Handle, idObject
 	return provider, nil
 }
 
-func (pf *UIAutomationProxyFactory) ProxyFactoryId() (string, error) {
+func (pf *ProxyFactory) ProxyFactoryId() (string, error) {
 	var factoryId *uint16
 
 	hr, _, _ := syscall.SyscallN(
@@ -153,11 +153,11 @@ func (pf *UIAutomationProxyFactory) ProxyFactoryId() (string, error) {
 	return ole.BstrToString(factoryId), nil
 }
 
-type UIAutomationProxyFactoryEntry struct {
+type ProxyFactoryEntry struct {
 	ole.IUnknown
 }
 
-type UIAutomationProxyFactoryEntryVtbl struct {
+type ProxyFactoryEntryVtbl struct {
 	ole.IUnknownVtbl
 	Get_ProxyFactory               uintptr
 	Get_ClassName                  uintptr
@@ -174,14 +174,14 @@ type UIAutomationProxyFactoryEntryVtbl struct {
 	GetWinEventsForAutomationEvent uintptr
 }
 
-func (pfe *UIAutomationProxyFactoryEntry) VTable() *UIAutomationProxyFactoryEntryVtbl {
-	return (*UIAutomationProxyFactoryEntryVtbl)(unsafe.Pointer(pfe.RawVTable))
+func (pfe *ProxyFactoryEntry) VTable() *ProxyFactoryEntryVtbl {
+	return (*ProxyFactoryEntryVtbl)(unsafe.Pointer(pfe.RawVTable))
 }
 
-type UIAutomationProxyFactoryMapping struct {
+type ProxyFactoryMapping struct {
 	vtbl *ole.IUnknown
 }
-type UIAutomationProxyFactoryMappingVtbl struct {
+type ProxyFactoryMappingVtbl struct {
 	ole.IUnknownVtbl
 	Get_Count           uintptr
 	GetTable            uintptr
@@ -194,8 +194,8 @@ type UIAutomationProxyFactoryMappingVtbl struct {
 	RestoreDefaultTable uintptr
 }
 
-func (pfm *UIAutomationProxyFactoryMapping) VTable() *UIAutomationProxyFactoryMappingVtbl {
-	return (*UIAutomationProxyFactoryMappingVtbl)(unsafe.Pointer(pfm.vtbl.RawVTable))
+func (pfm *ProxyFactoryMapping) VTable() *ProxyFactoryMappingVtbl {
+	return (*ProxyFactoryMappingVtbl)(unsafe.Pointer(pfm.vtbl.RawVTable))
 }
 
 type RawElementProviderSimple struct {
@@ -214,21 +214,21 @@ func (rep *RawElementProviderSimple) VTable() *RawElementProviderSimpleVtbl {
 	return (*RawElementProviderSimpleVtbl)(unsafe.Pointer(rep.RawVTable))
 }
 
-type UIAutomationTextRangeArray struct {
+type TextRangeArray struct {
 	ole.IUnknown
 }
 
-type UIAutomationTextRangeArrayVtbl struct {
+type TextRangeArrayVtbl struct {
 	ole.IUnknownVtbl
 	Get_Length uintptr
 	GetElement uintptr
 }
 
-func (tra *UIAutomationTextRangeArray) VTable() *UIAutomationTextRangeArrayVtbl {
-	return (*UIAutomationTextRangeArrayVtbl)(unsafe.Pointer(tra.RawVTable))
+func (tra *TextRangeArray) VTable() *TextRangeArrayVtbl {
+	return (*TextRangeArrayVtbl)(unsafe.Pointer(tra.RawVTable))
 }
 
-func (tra *UIAutomationTextRangeArray) Length() (int32, error) {
+func (tra *TextRangeArray) Length() (int32, error) {
 	var length int32
 
 	hr, _, _ := syscall.SyscallN(
@@ -244,8 +244,8 @@ func (tra *UIAutomationTextRangeArray) Length() (int32, error) {
 	return length, nil
 }
 
-func (tra *UIAutomationTextRangeArray) GetElement(index int32) (*UIAutomationTextRange, error) {
-	var textRange *UIAutomationTextRange
+func (tra *TextRangeArray) GetElement(index int32) (*TextRange, error) {
+	var textRange *TextRange
 
 	hr, _, _ := syscall.SyscallN(
 		tra.VTable().GetElement,
@@ -261,11 +261,11 @@ func (tra *UIAutomationTextRangeArray) GetElement(index int32) (*UIAutomationTex
 	return textRange, nil
 }
 
-type UIAutomationTextRange struct {
+type TextRange struct {
 	ole.IUnknown
 }
 
-type UIAutomationTextRangeVtbl struct {
+type TextRangeVtbl struct {
 	ole.IUnknownVtbl
 	Clone                 uintptr
 	Compare               uintptr
@@ -287,11 +287,11 @@ type UIAutomationTextRangeVtbl struct {
 	GetChildren           uintptr
 }
 
-func (tr *UIAutomationTextRange) VTable() *UIAutomationTextRangeVtbl {
-	return (*UIAutomationTextRangeVtbl)(unsafe.Pointer(tr.RawVTable))
+func (tr *TextRange) VTable() *TextRangeVtbl {
+	return (*TextRangeVtbl)(unsafe.Pointer(tr.RawVTable))
 }
 
-func (tr *UIAutomationTextRange) GetBoundingRectangles() ([]Rect, error) {
+func (tr *TextRange) GetBoundingRectangles() ([]Rect, error) {
 	var arr *ole.SafeArray
 
 	hr, _, _ := syscall.SyscallN(
@@ -322,7 +322,7 @@ func (tr *UIAutomationTextRange) GetBoundingRectangles() ([]Rect, error) {
 	return rects, nil
 }
 
-func (tr *UIAutomationTextRange) GetText(maxLength int32) (string, error) {
+func (tr *TextRange) GetText(maxLength int32) (string, error) {
 	var text *uint16
 
 	hr, _, _ := syscall.SyscallN(

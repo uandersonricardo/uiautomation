@@ -132,8 +132,8 @@ func (auto *UIAutomation) CompareRuntimeIds(runtimeId1, runtimeId2 []int32) (boo
 	return areSame, nil
 }
 
-func (auto *UIAutomation) GetRootElement() (*UIAutomationElement, error) {
-	var root *UIAutomationElement
+func (auto *UIAutomation) GetRootElement() (*Element, error) {
+	var root *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().GetRootElement,
@@ -148,8 +148,8 @@ func (auto *UIAutomation) GetRootElement() (*UIAutomationElement, error) {
 	return root, nil
 }
 
-func (auto *UIAutomation) ElementFromHandle(hwnd syscall.Handle) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromHandle(hwnd syscall.Handle) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromHandle,
@@ -165,8 +165,8 @@ func (auto *UIAutomation) ElementFromHandle(hwnd syscall.Handle) (*UIAutomationE
 	return element, nil
 }
 
-func (auto *UIAutomation) ElementFromPoint(point *Point) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromPoint(point *Point) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromPoint,
@@ -182,8 +182,8 @@ func (auto *UIAutomation) ElementFromPoint(point *Point) (*UIAutomationElement, 
 	return element, nil
 }
 
-func (auto *UIAutomation) GetFocusedElement() (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) GetFocusedElement() (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().GetFocusedElement,
@@ -198,8 +198,8 @@ func (auto *UIAutomation) GetFocusedElement() (*UIAutomationElement, error) {
 	return element, nil
 }
 
-func (auto *UIAutomation) GetRootElementBuildCache(cacheRequest *UIAutomationCacheRequest) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) GetRootElementBuildCache(cacheRequest *CacheRequest) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().GetRootElementBuildCache,
@@ -215,8 +215,8 @@ func (auto *UIAutomation) GetRootElementBuildCache(cacheRequest *UIAutomationCac
 	return element, nil
 }
 
-func (auto *UIAutomation) ElementFromHandleBuildCache(hwnd syscall.Handle, cacheRequest *UIAutomationCacheRequest) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromHandleBuildCache(hwnd syscall.Handle, cacheRequest *CacheRequest) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromHandleBuildCache,
@@ -233,8 +233,8 @@ func (auto *UIAutomation) ElementFromHandleBuildCache(hwnd syscall.Handle, cache
 	return element, nil
 }
 
-func (auto *UIAutomation) ElementFromPointBuildCache(point *Point, cacheRequest *UIAutomationCacheRequest) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromPointBuildCache(point *Point, cacheRequest *CacheRequest) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromPointBuildCache,
@@ -251,8 +251,8 @@ func (auto *UIAutomation) ElementFromPointBuildCache(point *Point, cacheRequest 
 	return element, nil
 }
 
-func (auto *UIAutomation) GetFocusedElementBuildCache(cacheRequest *UIAutomationCacheRequest) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) GetFocusedElementBuildCache(cacheRequest *CacheRequest) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().GetFocusedElementBuildCache,
@@ -268,8 +268,8 @@ func (auto *UIAutomation) GetFocusedElementBuildCache(cacheRequest *UIAutomation
 	return element, nil
 }
 
-func (auto *UIAutomation) CreateTreeWalker(condition *UIAutomationCondition) (*UIAutomationTreeWalker, error) {
-	var walker *UIAutomationTreeWalker
+func (auto *UIAutomation) CreateTreeWalker(condition *Condition) (*TreeWalker, error) {
+	var walker *TreeWalker
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateTreeWalker,
@@ -285,8 +285,8 @@ func (auto *UIAutomation) CreateTreeWalker(condition *UIAutomationCondition) (*U
 	return walker, nil
 }
 
-func (auto *UIAutomation) ControlViewWalker() (*UIAutomationTreeWalker, error) {
-	var walker *UIAutomationTreeWalker
+func (auto *UIAutomation) ControlViewWalker() (*TreeWalker, error) {
+	var walker *TreeWalker
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_ControlViewWalker,
@@ -301,8 +301,8 @@ func (auto *UIAutomation) ControlViewWalker() (*UIAutomationTreeWalker, error) {
 	return walker, nil
 }
 
-func (auto *UIAutomation) ContentViewWalker() (*UIAutomationTreeWalker, error) {
-	var walker *UIAutomationTreeWalker
+func (auto *UIAutomation) ContentViewWalker() (*TreeWalker, error) {
+	var walker *TreeWalker
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_ContentViewWalker,
@@ -317,8 +317,8 @@ func (auto *UIAutomation) ContentViewWalker() (*UIAutomationTreeWalker, error) {
 	return walker, nil
 }
 
-func (auto *UIAutomation) RawViewWalker() (*UIAutomationTreeWalker, error) {
-	var walker *UIAutomationTreeWalker
+func (auto *UIAutomation) RawViewWalker() (*TreeWalker, error) {
+	var walker *TreeWalker
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_RawViewWalker,
@@ -333,8 +333,8 @@ func (auto *UIAutomation) RawViewWalker() (*UIAutomationTreeWalker, error) {
 	return walker, nil
 }
 
-func (auto *UIAutomation) RawViewCondition() (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) RawViewCondition() (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_RawViewCondition,
@@ -349,8 +349,8 @@ func (auto *UIAutomation) RawViewCondition() (*UIAutomationCondition, error) {
 	return condition, nil
 }
 
-func (auto *UIAutomation) ControlViewCondition() (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) ControlViewCondition() (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_ControlViewCondition,
@@ -365,8 +365,8 @@ func (auto *UIAutomation) ControlViewCondition() (*UIAutomationCondition, error)
 	return condition, nil
 }
 
-func (auto *UIAutomation) ContentViewCondition() (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) ContentViewCondition() (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_ContentViewCondition,
@@ -381,8 +381,8 @@ func (auto *UIAutomation) ContentViewCondition() (*UIAutomationCondition, error)
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateCacheRequest() (*UIAutomationCacheRequest, error) {
-	var cacheRequest *UIAutomationCacheRequest
+func (auto *UIAutomation) CreateCacheRequest() (*CacheRequest, error) {
+	var cacheRequest *CacheRequest
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateCacheRequest,
@@ -397,8 +397,8 @@ func (auto *UIAutomation) CreateCacheRequest() (*UIAutomationCacheRequest, error
 	return cacheRequest, nil
 }
 
-func (auto *UIAutomation) CreateTrueCondition() (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateTrueCondition() (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateTrueCondition,
@@ -413,8 +413,8 @@ func (auto *UIAutomation) CreateTrueCondition() (*UIAutomationCondition, error) 
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateFalseCondition() (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateFalseCondition() (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateFalseCondition,
@@ -429,8 +429,8 @@ func (auto *UIAutomation) CreateFalseCondition() (*UIAutomationCondition, error)
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreatePropertyCondition(propertyId PropertyId, value *ole.VARIANT) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreatePropertyCondition(propertyId PropertyId, value *ole.VARIANT) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreatePropertyCondition,
@@ -447,8 +447,8 @@ func (auto *UIAutomation) CreatePropertyCondition(propertyId PropertyId, value *
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreatePropertyConditionEx(propertyId PropertyId, value *ole.VARIANT, flags PropertyConditionFlags) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreatePropertyConditionEx(propertyId PropertyId, value *ole.VARIANT, flags PropertyConditionFlags) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreatePropertyConditionEx,
@@ -466,8 +466,8 @@ func (auto *UIAutomation) CreatePropertyConditionEx(propertyId PropertyId, value
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateAndCondition(condition1, condition2 *UIAutomationCondition) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateAndCondition(condition1, condition2 *Condition) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateAndCondition,
@@ -484,8 +484,8 @@ func (auto *UIAutomation) CreateAndCondition(condition1, condition2 *UIAutomatio
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateAndConditionFromArray(conditions *ole.SafeArray) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateAndConditionFromArray(conditions *ole.SafeArray) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateAndConditionFromArray,
@@ -501,8 +501,8 @@ func (auto *UIAutomation) CreateAndConditionFromArray(conditions *ole.SafeArray)
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateAndConditionFromNativeArray(conditions []int32) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateAndConditionFromNativeArray(conditions []int32) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateAndConditionFromNativeArray,
@@ -519,8 +519,8 @@ func (auto *UIAutomation) CreateAndConditionFromNativeArray(conditions []int32) 
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateOrCondition(condition1, condition2 *UIAutomationCondition) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateOrCondition(condition1, condition2 *Condition) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateOrCondition,
@@ -537,8 +537,8 @@ func (auto *UIAutomation) CreateOrCondition(condition1, condition2 *UIAutomation
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateOrConditionFromArray(conditions *ole.SafeArray) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateOrConditionFromArray(conditions *ole.SafeArray) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateOrConditionFromArray,
@@ -554,8 +554,8 @@ func (auto *UIAutomation) CreateOrConditionFromArray(conditions *ole.SafeArray) 
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateOrConditionFromNativeArray(conditions []int32) (*UIAutomationCondition, error) {
-	var condition *UIAutomationCondition
+func (auto *UIAutomation) CreateOrConditionFromNativeArray(conditions []int32) (*Condition, error) {
+	var condition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateOrConditionFromNativeArray,
@@ -572,8 +572,8 @@ func (auto *UIAutomation) CreateOrConditionFromNativeArray(conditions []int32) (
 	return condition, nil
 }
 
-func (auto *UIAutomation) CreateNotCondition(condition *UIAutomationCondition) (*UIAutomationCondition, error) {
-	var notCondition *UIAutomationCondition
+func (auto *UIAutomation) CreateNotCondition(condition *Condition) (*Condition, error) {
+	var notCondition *Condition
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateNotCondition,
@@ -589,7 +589,7 @@ func (auto *UIAutomation) CreateNotCondition(condition *UIAutomationCondition) (
 	return notCondition, nil
 }
 
-func (auto *UIAutomation) AddAutomationEventHandler(eventId EventId, element *UIAutomationElement, scope TreeScope, cacheRequest *UIAutomationCacheRequest, handler *UIAutomationEventHandler) error {
+func (auto *UIAutomation) AddAutomationEventHandler(eventId EventId, element *Element, scope TreeScope, cacheRequest *CacheRequest, handler *EventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddAutomationEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -607,7 +607,7 @@ func (auto *UIAutomation) AddAutomationEventHandler(eventId EventId, element *UI
 	return nil
 }
 
-func (auto *UIAutomation) RemoveAutomationEventHandler(eventId EventId, element *UIAutomationElement, handler *UIAutomationEventHandler) error {
+func (auto *UIAutomation) RemoveAutomationEventHandler(eventId EventId, element *Element, handler *EventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RemoveAutomationEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -623,7 +623,7 @@ func (auto *UIAutomation) RemoveAutomationEventHandler(eventId EventId, element 
 	return nil
 }
 
-func (auto *UIAutomation) AddPropertyChangedEventHandlerNativeArray(element *UIAutomationElement, scope TreeScope, cacheRequest *UIAutomationCacheRequest, handler *UIAutomationPropertyChangedEventHandler, propertyArray []PropertyId) error {
+func (auto *UIAutomation) AddPropertyChangedEventHandlerNativeArray(element *Element, scope TreeScope, cacheRequest *CacheRequest, handler *PropertyChangedEventHandler, propertyArray []PropertyId) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddPropertyChangedEventHandlerNativeArray,
 		uintptr(unsafe.Pointer(auto)),
@@ -642,7 +642,7 @@ func (auto *UIAutomation) AddPropertyChangedEventHandlerNativeArray(element *UIA
 	return nil
 }
 
-func (auto *UIAutomation) AddPropertyChangedEventHandler(element *UIAutomationElement, scope TreeScope, cacheRequest *UIAutomationCacheRequest, handler *UIAutomationPropertyChangedEventHandler, propertyArray *ole.SafeArray) error {
+func (auto *UIAutomation) AddPropertyChangedEventHandler(element *Element, scope TreeScope, cacheRequest *CacheRequest, handler *PropertyChangedEventHandler, propertyArray *ole.SafeArray) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddPropertyChangedEventHandlerNativeArray,
 		uintptr(unsafe.Pointer(auto)),
@@ -660,7 +660,7 @@ func (auto *UIAutomation) AddPropertyChangedEventHandler(element *UIAutomationEl
 	return nil
 }
 
-func (auto *UIAutomation) RemovePropertyChangedEventHandler(element *UIAutomationElement, handler *UIAutomationPropertyChangedEventHandler) error {
+func (auto *UIAutomation) RemovePropertyChangedEventHandler(element *Element, handler *PropertyChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RemovePropertyChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -675,7 +675,7 @@ func (auto *UIAutomation) RemovePropertyChangedEventHandler(element *UIAutomatio
 	return nil
 }
 
-func (auto *UIAutomation) AddStructureChangedEventHandler(element *UIAutomationElement, scope TreeScope, cacheRequest *UIAutomationCacheRequest, handler *UIAutomationStructureChangedEventHandler) error {
+func (auto *UIAutomation) AddStructureChangedEventHandler(element *Element, scope TreeScope, cacheRequest *CacheRequest, handler *StructureChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddStructureChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -692,7 +692,7 @@ func (auto *UIAutomation) AddStructureChangedEventHandler(element *UIAutomationE
 	return nil
 }
 
-func (auto *UIAutomation) RemoveStructureChangedEventHandler(element *UIAutomationElement, handler *UIAutomationStructureChangedEventHandler) error {
+func (auto *UIAutomation) RemoveStructureChangedEventHandler(element *Element, handler *StructureChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RemoveStructureChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -707,7 +707,7 @@ func (auto *UIAutomation) RemoveStructureChangedEventHandler(element *UIAutomati
 	return nil
 }
 
-func (auto *UIAutomation) AddFocusChangedEventHandler(handler *UIAutomationFocusChangedEventHandler) error {
+func (auto *UIAutomation) AddFocusChangedEventHandler(handler *FocusChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddFocusChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -721,7 +721,7 @@ func (auto *UIAutomation) AddFocusChangedEventHandler(handler *UIAutomationFocus
 	return nil
 }
 
-func (auto *UIAutomation) RemoveFocusChangedEventHandler(handler *UIAutomationFocusChangedEventHandler) error {
+func (auto *UIAutomation) RemoveFocusChangedEventHandler(handler *FocusChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RemoveFocusChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
@@ -850,8 +850,8 @@ func (auto *UIAutomation) SafeArrayToRectNativeArray(safeArray *ole.SafeArray) (
 	return result, nil
 }
 
-func (auto *UIAutomation) CreateProxyFactoryEntry(factory *UIAutomationProxyFactory) (*UIAutomationProxyFactoryEntry, error) {
-	var entry *UIAutomationProxyFactoryEntry
+func (auto *UIAutomation) CreateProxyFactoryEntry(factory *ProxyFactory) (*ProxyFactoryEntry, error) {
+	var entry *ProxyFactoryEntry
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().CreateProxyFactoryEntry,
@@ -867,8 +867,8 @@ func (auto *UIAutomation) CreateProxyFactoryEntry(factory *UIAutomationProxyFact
 	return entry, nil
 }
 
-func (auto *UIAutomation) ProxyFactoryMapping() (*UIAutomationProxyFactoryMapping, error) {
-	var mapping *UIAutomationProxyFactoryMapping
+func (auto *UIAutomation) ProxyFactoryMapping() (*ProxyFactoryMapping, error) {
+	var mapping *ProxyFactoryMapping
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().Get_ProxyFactoryMapping,
@@ -922,7 +922,7 @@ func (auto *UIAutomation) GetPatternProgrammaticName(patternId PatternId) (strin
 	return str, nil
 }
 
-func (auto *UIAutomation) PollForPotentialSupportedPatterns(element *UIAutomationElement) ([]PatternId, error) {
+func (auto *UIAutomation) PollForPotentialSupportedPatterns(element *Element) ([]PatternId, error) {
 	var patternIds *ole.SafeArray
 	var patternNames *ole.SafeArray
 
@@ -953,7 +953,7 @@ func (auto *UIAutomation) PollForPotentialSupportedPatterns(element *UIAutomatio
 	return patterns, nil
 }
 
-func (auto *UIAutomation) PollForPotentialSupportedProperties(element *UIAutomationElement) ([]PropertyId, error) {
+func (auto *UIAutomation) PollForPotentialSupportedProperties(element *Element) ([]PropertyId, error) {
 	var propertyIds *ole.SafeArray
 	var propertyNames *ole.SafeArray
 
@@ -1033,8 +1033,8 @@ func (auto *UIAutomation) ReservedMixedAttributeValue() (interface{}, error) {
 	return value, nil
 }
 
-func (auto *UIAutomation) ElementFromIAccessible(accessible *Accessible, childId int32) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromIAccessible(accessible *Accessible, childId int32) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromIAccessible,
@@ -1051,8 +1051,8 @@ func (auto *UIAutomation) ElementFromIAccessible(accessible *Accessible, childId
 	return element, nil
 }
 
-func (auto *UIAutomation) ElementFromIAccessibleBuildCache(accessible *Accessible, childId int32, cacheRequest *UIAutomationCacheRequest) (*UIAutomationElement, error) {
-	var element *UIAutomationElement
+func (auto *UIAutomation) ElementFromIAccessibleBuildCache(accessible *Accessible, childId int32, cacheRequest *CacheRequest) (*Element, error) {
+	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().ElementFromIAccessibleBuildCache,

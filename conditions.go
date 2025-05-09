@@ -6,98 +6,98 @@ import (
 	"github.com/go-ole/go-ole"
 )
 
-type UIAutomationCondition struct {
+type Condition struct {
 	ole.IUnknown
 }
 
-type UIAutomationConditionVtbl struct {
+type ConditionVtbl struct {
 	ole.IUnknownVtbl
 }
 
-type UIAutomationAndCondition struct {
-	UIAutomationCondition
+type AndCondition struct {
+	Condition
 }
 
-type UIAutomationAndConditionVtbl struct {
-	UIAutomationConditionVtbl
+type AndConditionVtbl struct {
+	ConditionVtbl
 	Get_ChildCount           uintptr
 	GetChildrenAsNativeArray uintptr
 	GetChildren              uintptr
 }
 
-func (c *UIAutomationAndCondition) VTable() *UIAutomationAndConditionVtbl {
-	return (*UIAutomationAndConditionVtbl)(unsafe.Pointer(c.RawVTable))
+func (c *AndCondition) VTable() *AndConditionVtbl {
+	return (*AndConditionVtbl)(unsafe.Pointer(c.RawVTable))
 }
 
-func (c *UIAutomationAndCondition) ChildCount() (int32, error) {
+func (c *AndCondition) ChildCount() (int32, error) {
 	panic("Not implemented")
 }
 
-func (c *UIAutomationAndCondition) GetChildren() ([]*UIAutomationCondition, error) {
+func (c *AndCondition) GetChildren() ([]*Condition, error) {
 	panic("Not implemented")
 }
 
-func (c *UIAutomationAndCondition) GetChildrenAsNativeArray() ([]*UIAutomationCondition, error) {
+func (c *AndCondition) GetChildrenAsNativeArray() ([]*Condition, error) {
 	panic("Not implemented")
 }
 
-type UIAutomationBoolCondition struct {
-	UIAutomationCondition
+type BoolCondition struct {
+	Condition
 }
 
-type UIAutomationBoolConditionVtbl struct {
-	UIAutomationConditionVtbl
+type BoolConditionVtbl struct {
+	ConditionVtbl
 	Get_BooleanValue uintptr
 }
 
-func (c *UIAutomationBoolCondition) VTable() *UIAutomationBoolConditionVtbl {
-	return (*UIAutomationBoolConditionVtbl)(unsafe.Pointer(c.RawVTable))
+func (c *BoolCondition) VTable() *BoolConditionVtbl {
+	return (*BoolConditionVtbl)(unsafe.Pointer(c.RawVTable))
 }
 
-func (c *UIAutomationBoolCondition) BooleanValue() (bool, error) {
+func (c *BoolCondition) BooleanValue() (bool, error) {
 	panic("Not implemented")
 }
 
-type UIAutomationNotCondition struct {
-	UIAutomationCondition
+type NotCondition struct {
+	Condition
 }
 
-type UIAutomationNotConditionVtbl struct {
-	UIAutomationConditionVtbl
+type NotConditionVtbl struct {
+	ConditionVtbl
 	GetChild uintptr
 }
 
-func (c *UIAutomationNotCondition) VTable() *UIAutomationNotConditionVtbl {
-	return (*UIAutomationNotConditionVtbl)(unsafe.Pointer(c.RawVTable))
+func (c *NotCondition) VTable() *NotConditionVtbl {
+	return (*NotConditionVtbl)(unsafe.Pointer(c.RawVTable))
 }
 
-func (c *UIAutomationNotCondition) GetChild() (*UIAutomationCondition, error) {
+func (c *NotCondition) GetChild() (*Condition, error) {
 	panic("Not implemented")
 }
 
-type UIAutomationPropertyCondition struct {
-	UIAutomationCondition
+type PropertyCondition struct {
+	Condition
 }
 
-type UIAutomationPropertyConditionVtbl struct {
-	UIAutomationConditionVtbl
+type PropertyConditionVtbl struct {
+	ConditionVtbl
 	Get_PropertyId             uintptr
 	Get_PropertyValue          uintptr
 	Get_PropertyConditionFlags uintptr
 }
 
-func (c *UIAutomationPropertyCondition) VTable() *UIAutomationPropertyConditionVtbl {
-	return (*UIAutomationPropertyConditionVtbl)(unsafe.Pointer(c.RawVTable))
+func (c *PropertyCondition) VTable() *PropertyConditionVtbl {
+	return (*PropertyConditionVtbl)(unsafe.Pointer(c.RawVTable))
 }
 
-func (c *UIAutomationPropertyCondition) PropertyId() (PropertyId, error) {
+func (c *PropertyCondition) PropertyId() (PropertyId, error) {
 	panic("Not implemented")
 }
 
-func (c *UIAutomationPropertyCondition) PropertyValue() (interface{}, error) {
+func (c *PropertyCondition) PropertyValue() (interface{}, error) {
 	panic("Not implemented")
 }
 
-func (c *UIAutomationPropertyCondition) PropertyConditionFlags() (PropertyConditionFlags, error) {
+func (c *PropertyCondition) PropertyConditionFlags() (PropertyConditionFlags, error) {
 	panic("Not implemented")
 }
