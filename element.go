@@ -7,11 +7,11 @@ import (
 	"github.com/go-ole/go-ole"
 )
 
-type UIAutomationElement struct {
+type Element struct {
 	ole.IUnknown
 }
 
-type UIAutomationElementVtbl struct {
+type ElementVtbl struct {
 	ole.IUnknownVtbl
 	SetFocus                        uintptr
 	GetRuntimeId                    uintptr
@@ -97,11 +97,11 @@ type UIAutomationElementVtbl struct {
 	GetClickablePoint               uintptr
 }
 
-func (elem *UIAutomationElement) VTable() *UIAutomationElementVtbl {
-	return (*UIAutomationElementVtbl)(unsafe.Pointer(elem.RawVTable))
+func (elem *Element) VTable() *ElementVtbl {
+	return (*ElementVtbl)(unsafe.Pointer(elem.RawVTable))
 }
 
-func (elem *UIAutomationElement) SetFocus() error {
+func (elem *Element) SetFocus() error {
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().SetFocus,
 		uintptr(unsafe.Pointer(elem)),
@@ -114,7 +114,7 @@ func (elem *UIAutomationElement) SetFocus() error {
 	return nil
 }
 
-func (elem *UIAutomationElement) SetValue(value string) error {
+func (elem *Element) SetValue(value string) error {
 	valuePattern, err := elem.GetValuePattern()
 	if err != nil {
 		return err
@@ -123,7 +123,7 @@ func (elem *UIAutomationElement) SetValue(value string) error {
 	return valuePattern.SetValue(value)
 }
 
-func (elem *UIAutomationElement) Invoke() error {
+func (elem *Element) Invoke() error {
 	invokePattern, err := elem.GetInvokePattern()
 	if err != nil {
 		return err
@@ -132,7 +132,7 @@ func (elem *UIAutomationElement) Invoke() error {
 	return invokePattern.Invoke()
 }
 
-func (elem *UIAutomationElement) DoDefaultAction() error {
+func (elem *Element) DoDefaultAction() error {
 	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (elem *UIAutomationElement) DoDefaultAction() error {
 	return legacyAccessiblePattern.DoDefaultAction()
 }
 
-func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
+func (elem *Element) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
 	var patternObject *ole.IUnknown
 
 	hr, _, _ := syscall.SyscallN(
@@ -158,7 +158,7 @@ func (elem *UIAutomationElement) GetCurrentPattern(patternId PatternId) (*ole.IU
 	return patternObject, nil
 }
 
-func (elem *UIAutomationElement) GetInvokePattern() (*UIAutomationInvokePattern, error) {
+func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
 	patternObject, err := elem.GetCurrentPattern(InvokePatternId)
 
 	if err != nil {
@@ -171,10 +171,10 @@ func (elem *UIAutomationElement) GetInvokePattern() (*UIAutomationInvokePattern,
 		return nil, err
 	}
 
-	return (*UIAutomationInvokePattern)(unsafe.Pointer(invokePattern)), nil
+	return (*InvokePattern)(unsafe.Pointer(invokePattern)), nil
 }
 
-func (elem *UIAutomationElement) GetLegacyAccessiblePattern() (*UIAutomationLegacyAccessiblePattern, error) {
+func (elem *Element) GetLegacyAccessiblePattern() (*LegacyAccessiblePattern, error) {
 	patternObject, err := elem.GetCurrentPattern(LegacyIAccessiblePatternId)
 
 	if err != nil {
@@ -187,10 +187,10 @@ func (elem *UIAutomationElement) GetLegacyAccessiblePattern() (*UIAutomationLega
 		return nil, err
 	}
 
-	return (*UIAutomationLegacyAccessiblePattern)(unsafe.Pointer(legacyAccessiblePattern)), nil
+	return (*LegacyAccessiblePattern)(unsafe.Pointer(legacyAccessiblePattern)), nil
 }
 
-func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, error) {
+func (elem *Element) GetTextPattern() (*TextPattern, error) {
 	patternObject, err := elem.GetCurrentPattern(TextPatternId)
 
 	if err != nil {
@@ -203,10 +203,10 @@ func (elem *UIAutomationElement) GetTextPattern() (*UIAutomationTextPattern, err
 		return nil, err
 	}
 
-	return (*UIAutomationTextPattern)(unsafe.Pointer(textPattern)), nil
+	return (*TextPattern)(unsafe.Pointer(textPattern)), nil
 }
 
-func (elem *UIAutomationElement) GetValuePattern() (*UIAutomationValuePattern, error) {
+func (elem *Element) GetValuePattern() (*ValuePattern, error) {
 	patternObject, err := elem.GetCurrentPattern(ValuePatternId)
 
 	if err != nil {
@@ -219,10 +219,10 @@ func (elem *UIAutomationElement) GetValuePattern() (*UIAutomationValuePattern, e
 		return nil, err
 	}
 
-	return (*UIAutomationValuePattern)(unsafe.Pointer(valuePattern)), nil
+	return (*ValuePattern)(unsafe.Pointer(valuePattern)), nil
 }
 
-func (elem *UIAutomationElement) GetWindowPattern() (*UIAutomationWindowPattern, error) {
+func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 	patternObject, err := elem.GetCurrentPattern(WindowPatternId)
 
 	if err != nil {
@@ -235,10 +235,10 @@ func (elem *UIAutomationElement) GetWindowPattern() (*UIAutomationWindowPattern,
 		return nil, err
 	}
 
-	return (*UIAutomationWindowPattern)(unsafe.Pointer(windowPattern)), nil
+	return (*WindowPattern)(unsafe.Pointer(windowPattern)), nil
 }
 
-func (elem *UIAutomationElement) CurrentControlType() (ControlTypeId, error) {
+func (elem *Element) CurrentControlType() (ControlTypeId, error) {
 	var retVal ControlTypeId
 
 	hr, _, _ := syscall.SyscallN(
@@ -254,7 +254,7 @@ func (elem *UIAutomationElement) CurrentControlType() (ControlTypeId, error) {
 	return retVal, nil
 }
 
-func (elem *UIAutomationElement) CurrentControlTypeName() (string, error) {
+func (elem *Element) CurrentControlTypeName() (string, error) {
 	controlTypeId, err := elem.CurrentControlType()
 
 	if err != nil {
@@ -266,7 +266,7 @@ func (elem *UIAutomationElement) CurrentControlTypeName() (string, error) {
 	return controlTypeName, nil
 }
 
-func (elem *UIAutomationElement) CurrentName() (string, error) {
+func (elem *Element) CurrentName() (string, error) {
 	var retVal *uint16
 
 	hr, _, _ := syscall.SyscallN(
@@ -282,7 +282,7 @@ func (elem *UIAutomationElement) CurrentName() (string, error) {
 	return ole.BstrToString(retVal), nil
 }
 
-func (elem *UIAutomationElement) CurrentAutomationId() (string, error) {
+func (elem *Element) CurrentAutomationId() (string, error) {
 	var retVal *uint16
 
 	hr, _, _ := syscall.SyscallN(
@@ -298,7 +298,7 @@ func (elem *UIAutomationElement) CurrentAutomationId() (string, error) {
 	return ole.BstrToString(retVal), nil
 }
 
-func (elem *UIAutomationElement) CurrentClassName() (string, error) {
+func (elem *Element) CurrentClassName() (string, error) {
 	var retVal *uint16
 
 	hr, _, _ := syscall.SyscallN(
@@ -314,7 +314,7 @@ func (elem *UIAutomationElement) CurrentClassName() (string, error) {
 	return ole.BstrToString(retVal), nil
 }
 
-func (elem *UIAutomationElement) CurrentNativeWindowHandle() (syscall.Handle, error) {
+func (elem *Element) CurrentNativeWindowHandle() (syscall.Handle, error) {
 	var retVal syscall.Handle
 
 	hr, _, _ := syscall.SyscallN(
@@ -330,7 +330,7 @@ func (elem *UIAutomationElement) CurrentNativeWindowHandle() (syscall.Handle, er
 	return retVal, nil
 }
 
-func (elem *UIAutomationElement) CurrentBoundingRectangle() (Rect, error) {
+func (elem *Element) CurrentBoundingRectangle() (Rect, error) {
 	var retVal Rect
 
 	hr, _, _ := syscall.SyscallN(
@@ -346,7 +346,7 @@ func (elem *UIAutomationElement) CurrentBoundingRectangle() (Rect, error) {
 	return retVal, nil
 }
 
-func (elem *UIAutomationElement) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, error) {
+func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, error) {
 	var retVal ole.VARIANT
 
 	ole.VariantInit(&retVal)
@@ -365,8 +365,8 @@ func (elem *UIAutomationElement) CurrentPropertyValue(propertyId PropertyId) (ol
 	return retVal, nil
 }
 
-func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomationCondition) (*UIAutomationElement, error) {
-	var found *UIAutomationElement
+func (elem *Element) FindFirst(scope TreeScope, condition *Condition) (*Element, error) {
+	var found *Element
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().FindFirst,
@@ -383,21 +383,21 @@ func (elem *UIAutomationElement) FindFirst(scope TreeScope, condition *UIAutomat
 	return found, nil
 }
 
-type UIAutomationElementArray struct {
+type ElementArray struct {
 	ole.IUnknown
 }
 
-type UIAutomationElementArrayVtbl struct {
+type ElementArrayVtbl struct {
 	ole.IUnknownVtbl
 	Get_Length uintptr
 	GetElement uintptr
 }
 
-func (arr *UIAutomationElementArray) VTable() *UIAutomationElementArrayVtbl {
-	return (*UIAutomationElementArrayVtbl)(unsafe.Pointer(arr.RawVTable))
+func (arr *ElementArray) VTable() *ElementArrayVtbl {
+	return (*ElementArrayVtbl)(unsafe.Pointer(arr.RawVTable))
 }
 
-func (arr *UIAutomationElementArray) Length() (int32, error) {
+func (arr *ElementArray) Length() (int32, error) {
 	var retVal int32
 
 	hr, _, _ := syscall.SyscallN(
@@ -413,8 +413,8 @@ func (arr *UIAutomationElementArray) Length() (int32, error) {
 	return retVal, nil
 }
 
-func (arr *UIAutomationElementArray) GetElement(index int32) (*UIAutomationElement, error) {
-	var retVal *UIAutomationElement
+func (arr *ElementArray) GetElement(index int32) (*Element, error) {
+	var retVal *Element
 
 	hr, _, _ := syscall.SyscallN(
 		arr.VTable().GetElement,
