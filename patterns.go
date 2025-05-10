@@ -839,6 +839,424 @@ func (pat *ExpandCollapsePattern) CachedExpandCollapseState() (ExpandCollapseSta
 	return state, nil
 }
 
+type GridPattern struct {
+	ole.IUnknown
+}
+
+type GridPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetItem                uintptr
+	Get_CurrentRowCount    uintptr
+	Get_CurrentColumnCount uintptr
+	Get_CachedRowCount     uintptr
+	Get_CachedColumnCount  uintptr
+}
+
+func (pat *GridPattern) VTable() *GridPatternVtbl {
+	return (*GridPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *GridPattern) GetItem(row, column int32) (*Element, error) {
+	var element *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetItem,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(row),
+		uintptr(column),
+		uintptr(unsafe.Pointer(&element)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return element, nil
+}
+
+func (pat *GridPattern) CurrentRowCount() (int32, error) {
+	var rowCount int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentRowCount,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&rowCount)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return rowCount, nil
+}
+
+func (pat *GridPattern) CurrentColumnCount() (int32, error) {
+	var columnCount int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentColumnCount,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&columnCount)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return columnCount, nil
+}
+
+func (pat *GridPattern) CachedRowCount() (int32, error) {
+	var rowCount int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedRowCount,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&rowCount)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return rowCount, nil
+}
+
+func (pat *GridPattern) CachedColumnCount() (int32, error) {
+	var columnCount int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedColumnCount,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&columnCount)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return columnCount, nil
+}
+
+type GridItemPattern struct {
+	ole.IUnknown
+}
+
+type GridItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentContainingGrid uintptr
+	Get_CurrentRow            uintptr
+	Get_CurrentColumn         uintptr
+	Get_CurrentRowSpan        uintptr
+	Get_CurrentColumnSpan     uintptr
+	Get_CachedContainingGrid  uintptr
+	Get_CachedRow             uintptr
+	Get_CachedColumn          uintptr
+	Get_CachedRowSpan         uintptr
+	Get_CachedColumnSpan      uintptr
+}
+
+func (pat *GridItemPattern) VTable() *GridItemPatternVtbl {
+	return (*GridItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *GridItemPattern) CurrentContainingGrid() (*Element, error) {
+	var grid *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentContainingGrid,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&grid)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return grid, nil
+}
+
+func (pat *GridItemPattern) CurrentRow() (int32, error) {
+	var row int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentRow,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&row)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return row, nil
+}
+
+func (pat *GridItemPattern) CurrentColumn() (int32, error) {
+	var column int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentColumn,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&column)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return column, nil
+}
+
+func (pat *GridItemPattern) CurrentRowSpan() (int32, error) {
+	var rowSpan int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentRowSpan,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&rowSpan)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return rowSpan, nil
+}
+
+func (pat *GridItemPattern) CurrentColumnSpan() (int32, error) {
+	var columnSpan int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentColumnSpan,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&columnSpan)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return columnSpan, nil
+}
+
+func (pat *GridItemPattern) CachedContainingGrid() (*Element, error) {
+	var grid *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedContainingGrid,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&grid)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return grid, nil
+}
+
+func (pat *GridItemPattern) CachedRow() (int32, error) {
+	var row int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedRow,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&row)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return row, nil
+}
+
+func (pat *GridItemPattern) CachedColumn() (int32, error) {
+	var column int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedColumn,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&column)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return column, nil
+}
+
+func (pat *GridItemPattern) CachedRowSpan() (int32, error) {
+	var rowSpan int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedRowSpan,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&rowSpan)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return rowSpan, nil
+}
+
+func (pat *GridItemPattern) CachedColumnSpan() (int32, error) {
+	var columnSpan int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedColumnSpan,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&columnSpan)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return columnSpan, nil
+}
+
+type MultipleViewPattern struct {
+	ole.IUnknown
+}
+
+type MultipleViewPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetViewName              uintptr
+	SetCurrentView           uintptr
+	Get_CurrentCurrentView   uintptr
+	GetCurrentSupportedViews uintptr
+	Get_CachedCurrentView    uintptr
+	GetCachedSupportedViews  uintptr
+}
+
+func (pat *MultipleViewPattern) VTable() *MultipleViewPatternVtbl {
+	return (*MultipleViewPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *MultipleViewPattern) GetViewName(viewId int32) (string, error) {
+	var name *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetViewName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(viewId),
+		uintptr(unsafe.Pointer(&name)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(name), nil
+}
+
+func (pat *MultipleViewPattern) SetCurrentView(viewId int32) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().SetCurrentView,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(viewId),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *MultipleViewPattern) CurrentCurrentView() (int32, error) {
+	var currentView int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentCurrentView,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&currentView)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return currentView, nil
+}
+
+func (pat *MultipleViewPattern) CurrentSupportedViews() ([]int32, error) {
+	var safeArray *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentSupportedViews,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&safeArray)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	conversion := ole.SafeArrayConversion{Array: safeArray}
+	defer conversion.Release()
+
+	arr := conversion.ToValueArray()
+
+	var views []int32
+	for i := 0; i < len(views); i++ {
+		if v, ok := arr[i].(int32); ok {
+			views = append(views, v)
+		}
+	}
+
+	return views, nil
+}
+
+func (pat *MultipleViewPattern) CachedCurrentView() (int32, error) {
+	var currentView int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCurrentView,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&currentView)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return currentView, nil
+}
+
+func (pat *MultipleViewPattern) CachedSupportedViews() ([]int32, error) {
+	var safeArray *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedSupportedViews,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&safeArray)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	conversion := ole.SafeArrayConversion{Array: safeArray}
+	defer conversion.Release()
+
+	arr := conversion.ToValueArray()
+
+	var views []int32
+	for i := 0; i < len(views); i++ {
+		if v, ok := arr[i].(int32); ok {
+			views = append(views, v)
+		}
+	}
+
+	return views, nil
+}
+
 type WindowPattern struct {
 	ole.IUnknown
 }
