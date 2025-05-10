@@ -86,3 +86,50 @@ const (
 	RowOrColumnMajorColumnMajor
 	RowOrColumnMajorIndeterminate
 )
+
+type SupportedTextSelection uint32
+
+const (
+	SupportedTextSelectionNone SupportedTextSelection = iota
+	SupportedTextSelectionSingle
+	SupportedTextSelectionMultiple
+)
+
+type ToggleState uint32
+
+const (
+	ToggleStateOff ToggleState = iota
+	ToggleStateOn
+	ToggleStateIndeterminate
+)
+
+type SynchronizedInputType uint32
+
+const (
+	SynchronizedInputTypeKeyUp          SynchronizedInputType = 0x1
+	SynchronizedInputTypeKeyDown        SynchronizedInputType = 0x2
+	SynchronizedInputTypeLeftMouseUp    SynchronizedInputType = 0x4
+	SynchronizedInputTypeLeftMouseDown  SynchronizedInputType = 0x8
+	SynchronizedInputTypeRightMouseUp   SynchronizedInputType = 0x10
+	SynchronizedInputTypeRightMouseDown SynchronizedInputType = 0x20
+)
+
+type ZoomUnit uint32
+
+const (
+	ZoomUnitNoAmount ZoomUnit = iota
+	ZoomUnitLargeDecrement
+	ZoomUnitSmallDecrement
+	ZoomUnitLargeIncrement
+	ZoomUnitSmallIncrement
+)
+
+type NavigateDirection uint32
+
+const (
+	NavigateDirectionParent NavigateDirection = iota
+	NavigateDirectionNextSibling
+	NavigateDirectionPreviousSibling
+	NavigateDirectionFirstChild
+	NavigateDirectionLastChild
+)

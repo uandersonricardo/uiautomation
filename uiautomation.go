@@ -791,30 +791,30 @@ func (auto *UIAutomation) IntSafeArrayToNativeArray(safeArray *ole.SafeArray) ([
 	return result, nil
 }
 
-func (auto *UIAutomation) RectToVariant(rect Rect) (ole.VARIANT, error) {
-	var variant ole.VARIANT
+func (auto *UIAutomation) RectToVariant(rect Rect) (*ole.VARIANT, error) {
+	var variant *ole.VARIANT
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RectToVariant,
 		uintptr(unsafe.Pointer(auto)),
 		uintptr(unsafe.Pointer(&rect)),
-		uintptr(unsafe.Pointer(&variant)),
+		uintptr(unsafe.Pointer(variant)),
 	)
 
 	if hr != 0 {
-		return ole.VARIANT{}, ole.NewError(hr)
+		return nil, ole.NewError(hr)
 	}
 
 	return variant, nil
 }
 
-func (auto *UIAutomation) VariantToRect(variant ole.VARIANT) (Rect, error) {
+func (auto *UIAutomation) VariantToRect(variant *ole.VARIANT) (Rect, error) {
 	var rect Rect
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().VariantToRect,
 		uintptr(unsafe.Pointer(auto)),
-		uintptr(unsafe.Pointer(&variant)),
+		uintptr(unsafe.Pointer(variant)),
 		uintptr(unsafe.Pointer(&rect)),
 	)
 
@@ -1001,7 +1001,7 @@ func (auto *UIAutomation) CheckNotSupported(value *ole.VARIANT) (bool, error) {
 	return isNotSupported, nil
 }
 
-func (auto *UIAutomation) ReservedNotSupportedValue() (interface{}, error) {
+func (auto *UIAutomation) ReservedNotSupportedValue() (*ole.IUnknown, error) {
 	var value *ole.IUnknown
 
 	hr, _, _ := syscall.SyscallN(
@@ -1017,7 +1017,7 @@ func (auto *UIAutomation) ReservedNotSupportedValue() (interface{}, error) {
 	return value, nil
 }
 
-func (auto *UIAutomation) ReservedMixedAttributeValue() (interface{}, error) {
+func (auto *UIAutomation) ReservedMixedAttributeValue() (*ole.IUnknown, error) {
 	var value *ole.IUnknown
 
 	hr, _, _ := syscall.SyscallN(

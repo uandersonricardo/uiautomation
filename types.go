@@ -19,3 +19,8 @@ type Point struct {
 	X int32
 	Y int32
 }
+
+type ExtendedProperty struct {
+	PropertyName  string
+	PropertyValue string
+}

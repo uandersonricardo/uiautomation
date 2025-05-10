@@ -114,31 +114,22 @@ func (elem *Element) SetFocus() error {
 	return nil
 }
 
-func (elem *Element) SetValue(value string) error {
-	valuePattern, err := elem.GetValuePattern()
-	if err != nil {
-		return err
-	}
-	defer valuePattern.Release()
-	return valuePattern.SetValue(value)
-}
+func (elem *Element) FindFirst(scope TreeScope, condition *Condition) (*Element, error) {
+	var found *Element
 
-func (elem *Element) Invoke() error {
-	invokePattern, err := elem.GetInvokePattern()
-	if err != nil {
-		return err
-	}
-	defer invokePattern.Release()
-	return invokePattern.Invoke()
-}
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindFirst,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&found)),
+	)
 
-func (elem *Element) DoDefaultAction() error {
-	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
-	if err != nil {
-		return err
+	if hr != 0 {
+		return nil, ole.NewError(hr)
 	}
-	defer legacyAccessiblePattern.Release()
-	return legacyAccessiblePattern.DoDefaultAction()
+
+	return found, nil
 }
 
 func (elem *Element) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
@@ -254,16 +245,16 @@ func (elem *Element) CurrentBoundingRectangle() (Rect, error) {
 	return retVal, nil
 }
 
-func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, error) {
-	var retVal ole.VARIANT
+func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
+	var retVal *ole.VARIANT
 
-	ole.VariantInit(&retVal)
+	ole.VariantInit(retVal)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPropertyValue,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(propertyId),
-		uintptr(unsafe.Pointer(&retVal)),
+		uintptr(unsafe.Pointer(retVal)),
 	)
 
 	if hr != 0 {
@@ -271,24 +262,6 @@ func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, e
 	}
 
 	return retVal, nil
-}
-
-func (elem *Element) FindFirst(scope TreeScope, condition *Condition) (*Element, error) {
-	var found *Element
-
-	hr, _, _ := syscall.SyscallN(
-		elem.VTable().FindFirst,
-		uintptr(unsafe.Pointer(elem)),
-		uintptr(scope),
-		uintptr(unsafe.Pointer(condition)),
-		uintptr(unsafe.Pointer(&found)),
-	)
-
-	if hr != 0 {
-		return nil, ole.NewError(hr)
-	}
-
-	return found, nil
 }
 
 func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
@@ -387,6 +360,54 @@ func (elem *Element) GetExpandCollapsePattern() (*ExpandCollapsePattern, error) 
 	return (*ExpandCollapsePattern)(unsafe.Pointer(expandCollapsePattern)), nil
 }
 
+func (elem *Element) GetGridPattern() (*GridPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(GridPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	gridPattern, err := patternObject.QueryInterface(IID_IUIAutomationGridPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*GridPattern)(unsafe.Pointer(gridPattern)), nil
+}
+
+func (elem *Element) GetGridItemPattern() (*GridItemPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(GridItemPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	gridItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationGridItemPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*GridItemPattern)(unsafe.Pointer(gridItemPattern)), nil
+}
+
+func (elem *Element) GetMultipleViewPattern() (*MultipleViewPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(MultipleViewPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	multipleViewPattern, err := patternObject.QueryInterface(IID_IUIAutomationMultipleViewPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*MultipleViewPattern)(unsafe.Pointer(multipleViewPattern)), nil
+}
+
 func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 	patternObject, err := elem.GetCurrentPattern(WindowPatternId)
 
@@ -403,6 +424,70 @@ func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 	return (*WindowPattern)(unsafe.Pointer(windowPattern)), nil
 }
 
+func (elem *Element) GetSelectionItemPattern() (*SelectionItemPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(SelectionItemPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	selectionItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationSelectionItemPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*SelectionItemPattern)(unsafe.Pointer(selectionItemPattern)), nil
+}
+
+func (elem *Element) GetDockPattern() (*DockPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(DockPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dockPattern, err := patternObject.QueryInterface(IID_IUIAutomationDockPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*DockPattern)(unsafe.Pointer(dockPattern)), nil
+}
+
+func (elem *Element) GetTablePattern() (*TablePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TablePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	tablePattern, err := patternObject.QueryInterface(IID_IUIAutomationTablePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TablePattern)(unsafe.Pointer(tablePattern)), nil
+}
+
+func (elem *Element) GetTableItemPattern() (*TableItemPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TableItemPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	tableItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationTableItemPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TableItemPattern)(unsafe.Pointer(tableItemPattern)), nil
+}
+
 func (elem *Element) GetTextPattern() (*TextPattern, error) {
 	patternObject, err := elem.GetCurrentPattern(TextPatternId)
 
@@ -417,6 +502,38 @@ func (elem *Element) GetTextPattern() (*TextPattern, error) {
 	}
 
 	return (*TextPattern)(unsafe.Pointer(textPattern)), nil
+}
+
+func (elem *Element) GetTogglePattern() (*TogglePattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TogglePatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	togglePattern, err := patternObject.QueryInterface(IID_IUIAutomationTogglePattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TogglePattern)(unsafe.Pointer(togglePattern)), nil
+}
+
+func (elem *Element) GetTransformPattern() (*TransformPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TransformPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	transformPattern, err := patternObject.QueryInterface(IID_IUIAutomationTransformPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TransformPattern)(unsafe.Pointer(transformPattern)), nil
 }
 
 func (elem *Element) GetScrollItemPattern() (*ScrollItemPattern, error) {
@@ -449,6 +566,282 @@ func (elem *Element) GetLegacyAccessiblePattern() (*LegacyAccessiblePattern, err
 	}
 
 	return (*LegacyAccessiblePattern)(unsafe.Pointer(legacyAccessiblePattern)), nil
+}
+
+func (elem *Element) GetItemContainerPattern() (*ItemContainerPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(ItemContainerPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	itemContainerPattern, err := patternObject.QueryInterface(IID_IUIAutomationItemContainerPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*ItemContainerPattern)(unsafe.Pointer(itemContainerPattern)), nil
+}
+
+func (elem *Element) GetVirtualizedItemPattern() (*VirtualizedItemPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(VirtualizedItemPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	virtualizedItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationVirtualizedItemPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*VirtualizedItemPattern)(unsafe.Pointer(virtualizedItemPattern)), nil
+}
+
+func (elem *Element) GetSynchronizedInputPattern() (*SynchronizedInputPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(SynchronizedInputPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	synchronizedInputPattern, err := patternObject.QueryInterface(IID_IUIAutomationSynchronizedInputPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*SynchronizedInputPattern)(unsafe.Pointer(synchronizedInputPattern)), nil
+}
+
+func (elem *Element) GetObjectModelPattern() (*ObjectModelPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(ObjectModelPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	objectModelPattern, err := patternObject.QueryInterface(IID_IUIAutomationObjectModelPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*ObjectModelPattern)(unsafe.Pointer(objectModelPattern)), nil
+}
+
+func (elem *Element) GetAnnotationPattern() (*AnnotationPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(AnnotationPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	annotationPattern, err := patternObject.QueryInterface(IID_IUIAutomationAnnotationPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*AnnotationPattern)(unsafe.Pointer(annotationPattern)), nil
+}
+
+func (elem *Element) GetTextPattern2() (*TextPattern2, error) {
+	patternObject, err := elem.GetCurrentPattern(TextPattern2Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	textPattern2, err := patternObject.QueryInterface(IID_IUIAutomationTextPattern2)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TextPattern2)(unsafe.Pointer(textPattern2)), nil
+}
+
+func (elem *Element) GetStylesPattern() (*StylesPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(StylesPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	stylesPattern, err := patternObject.QueryInterface(IID_IUIAutomationStylesPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*StylesPattern)(unsafe.Pointer(stylesPattern)), nil
+}
+
+func (elem *Element) GetSpreadsheetPattern() (*SpreadsheetPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(SpreadsheetPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	spreadsheetPattern, err := patternObject.QueryInterface(IID_IUIAutomationSpreadsheetPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*SpreadsheetPattern)(unsafe.Pointer(spreadsheetPattern)), nil
+}
+
+func (elem *Element) GetSpreadsheetItemPattern() (*SpreadsheetItemPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(SpreadsheetItemPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	spreadsheetItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationSpreadsheetItemPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*SpreadsheetItemPattern)(unsafe.Pointer(spreadsheetItemPattern)), nil
+}
+
+func (elem *Element) GetTransformPattern2() (*TransformPattern2, error) {
+	patternObject, err := elem.GetCurrentPattern(TransformPattern2Id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	transformPattern2, err := patternObject.QueryInterface(IID_IUIAutomationTransformPattern2)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TransformPattern2)(unsafe.Pointer(transformPattern2)), nil
+}
+
+func (elem *Element) GetTextChildPattern() (*TextChildPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TextChildPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	textChildPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextChildPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TextChildPattern)(unsafe.Pointer(textChildPattern)), nil
+}
+
+func (elem *Element) GetDragPattern() (*DragPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(DragPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dragPattern, err := patternObject.QueryInterface(IID_IUIAutomationDragPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*DragPattern)(unsafe.Pointer(dragPattern)), nil
+}
+
+func (elem *Element) GetDropTargetPattern() (*DropTargetPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(DropTargetPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dropTargetPattern, err := patternObject.QueryInterface(IID_IUIAutomationDropTargetPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*DropTargetPattern)(unsafe.Pointer(dropTargetPattern)), nil
+}
+
+func (elem *Element) GetTextEditPattern() (*TextEditPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(TextEditPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	textEditPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextEditPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*TextEditPattern)(unsafe.Pointer(textEditPattern)), nil
+}
+
+func (elem *Element) GetCustomNavigationPattern() (*CustomNavigationPattern, error) {
+	patternObject, err := elem.GetCurrentPattern(CustomNavigationPatternId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	customNavigationPattern, err := patternObject.QueryInterface(IID_IUIAutomationCustomNavigationPattern)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return (*CustomNavigationPattern)(unsafe.Pointer(customNavigationPattern)), nil
+}
+
+func (elem *Element) SetValue(value string) error {
+	valuePattern, err := elem.GetValuePattern()
+
+	if err != nil {
+		return err
+	}
+
+	defer valuePattern.Release()
+
+	return valuePattern.SetValue(value)
+}
+
+func (elem *Element) Invoke() error {
+	invokePattern, err := elem.GetInvokePattern()
+
+	if err != nil {
+		return err
+	}
+
+	defer invokePattern.Release()
+
+	return invokePattern.Invoke()
+}
+
+func (elem *Element) DoDefaultAction() error {
+	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
+
+	if err != nil {
+		return err
+	}
+
+	defer legacyAccessiblePattern.Release()
+
+	return legacyAccessiblePattern.DoDefaultAction()
 }
 
 func (elem *Element) CurrentControlTypeName() (string, error) {
