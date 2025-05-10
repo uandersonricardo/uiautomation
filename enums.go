@@ -67,3 +67,22 @@ const (
 	ExpandCollapseStatePartiallyExpanded
 	ExpandCollapseStateLeafNode
 )
+
+type DockPosition uint32
+
+const (
+	DockPositionTop DockPosition = iota
+	DockPositionLeft
+	DockPositionBottom
+	DockPositionRight
+	DockPositionFill
+	DockPositionNone
+)
+
+type RowOrColumnMajor uint32
+
+const (
+	RowOrColumnMajorRowMajor RowOrColumnMajor = iota
+	RowOrColumnMajorColumnMajor
+	RowOrColumnMajorIndeterminate
+)

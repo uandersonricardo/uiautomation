@@ -1520,6 +1520,383 @@ func (pat *WindowPattern) CachedWindowInteractionState() (WindowInteractionState
 	return state, nil
 }
 
+type SelectionItemPattern struct {
+	ole.IUnknown
+}
+
+type SelectionItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	Select                        uintptr
+	AddToSelection                uintptr
+	RemoveFromSelection           uintptr
+	Get_CurrentIsSelected         uintptr
+	Get_CurrentSelectionContainer uintptr
+	Get_CachedIsSelected          uintptr
+	Get_CachedSelectionContainer  uintptr
+}
+
+func (pat *SelectionItemPattern) VTable() *SelectionItemPatternVtbl {
+	return (*SelectionItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *SelectionItemPattern) Select() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Select,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *SelectionItemPattern) AddToSelection() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().AddToSelection,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *SelectionItemPattern) RemoveFromSelection() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().RemoveFromSelection,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *SelectionItemPattern) CurrentIsSelected() (bool, error) {
+	var isSelected bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsSelected,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isSelected)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isSelected, nil
+}
+
+func (pat *SelectionItemPattern) CurrentSelectionContainer() (*Element, error) {
+	var container *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentSelectionContainer,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&container)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return container, nil
+}
+
+func (pat *SelectionItemPattern) CachedIsSelected() (bool, error) {
+	var isSelected bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsSelected,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isSelected)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isSelected, nil
+}
+
+func (pat *SelectionItemPattern) CachedSelectionContainer() (*Element, error) {
+	var container *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedSelectionContainer,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&container)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return container, nil
+}
+
+type DockPattern struct {
+	ole.IUnknown
+}
+
+type DockPatternVtbl struct {
+	ole.IUnknownVtbl
+	SetDockPosition         uintptr
+	Get_CurrentDockPosition uintptr
+	Get_CachedDockPosition  uintptr
+}
+
+func (pat *DockPattern) VTable() *DockPatternVtbl {
+	return (*DockPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *DockPattern) SetDockPosition(dockPosition DockPosition) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().SetDockPosition,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(dockPosition),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *DockPattern) CurrentDockPosition() (DockPosition, error) {
+	var dockPosition DockPosition
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDockPosition,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dockPosition)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return dockPosition, nil
+}
+
+func (pat *DockPattern) CachedDockPosition() (DockPosition, error) {
+	var dockPosition DockPosition
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDockPosition,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dockPosition)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return dockPosition, nil
+}
+
+type TablePattern struct {
+	ole.IUnknown
+}
+
+type TablePatternVtbl struct {
+	ole.IUnknownVtbl
+	GetCurrentRowHeaders        uintptr
+	GetCurrentColumnHeaders     uintptr
+	Get_CurrentRowOrColumnMajor uintptr
+	GetCachedRowHeaders         uintptr
+	GetCachedColumnHeaders      uintptr
+	Get_CachedRowOrColumnMajor  uintptr
+}
+
+func (pat *TablePattern) VTable() *TablePatternVtbl {
+	return (*TablePatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TablePattern) GetCurrentRowHeaders() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentRowHeaders,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TablePattern) GetCurrentColumnHeaders() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentColumnHeaders,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TablePattern) CurrentRowOrColumnMajor() (RowOrColumnMajor, error) {
+	var major RowOrColumnMajor
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentRowOrColumnMajor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&major)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return major, nil
+}
+
+func (pat *TablePattern) GetCachedRowHeaders() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedRowHeaders,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TablePattern) GetCachedColumnHeaders() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedColumnHeaders,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TablePattern) CachedRowOrColumnMajor() (RowOrColumnMajor, error) {
+	var major RowOrColumnMajor
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedRowOrColumnMajor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&major)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return major, nil
+}
+
+type TableItemPattern struct {
+	ole.IUnknown
+}
+
+type TableItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetCurrentRowHeaderItems    uintptr
+	GetCurrentColumnHeaderItems uintptr
+	GetCachedRowHeaderItems     uintptr
+	GetCachedColumnHeaderItems  uintptr
+}
+
+func (pat *TableItemPattern) VTable() *TableItemPatternVtbl {
+	return (*TableItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TableItemPattern) GetCurrentRowHeaderItems() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentRowHeaderItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TableItemPattern) GetCurrentColumnHeaderItems() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentColumnHeaderItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TableItemPattern) GetCachedRowHeaderItems() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedRowHeaderItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
+func (pat *TableItemPattern) GetCachedColumnHeaderItems() (*ElementArray, error) {
+	var headers *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedColumnHeaderItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&headers)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return headers, nil
+}
+
 type TextPattern struct {
 	ole.IUnknown
 }
