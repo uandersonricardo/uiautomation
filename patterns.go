@@ -43,6 +43,7 @@ const (
 	DragPatternId              PatternId = 10030
 	DropTargetPatternId        PatternId = 10031
 	TextEditPatternId          PatternId = 10032
+	CustomNavigationPatternId  PatternId = 10033
 )
 
 type InvokePattern struct {
@@ -3664,4 +3665,354 @@ func (pat *TransformPattern2) CachedZoomMaximum() (float64, error) {
 	}
 
 	return zoomMax, nil
+}
+
+type TextChildPattern struct {
+	ole.IUnknown
+}
+
+type TextChildPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_TextContainer uintptr
+	Get_TextRange     uintptr
+}
+
+func (pat *TextChildPattern) VTable() *TextChildPatternVtbl {
+	return (*TextChildPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TextChildPattern) GetTextContainer() (*Element, error) {
+	var container *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_TextContainer,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&container)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return container, nil
+}
+
+func (pat *TextChildPattern) GetTextRange() (*TextRange, error) {
+	var rangeObj *TextRange
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_TextRange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&rangeObj)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return rangeObj, nil
+}
+
+type DragPattern struct {
+	ole.IUnknown
+}
+
+type DragPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentIsGrabbed   uintptr
+	Get_CachedIsGrabbed    uintptr
+	Get_CurrentDropEffect  uintptr
+	Get_CachedDropEffect   uintptr
+	Get_CurrentDropEffects uintptr
+	Get_CachedDropEffects  uintptr
+	GetCurrentGrabbedItems uintptr
+	GetCachedGrabbedItems  uintptr
+}
+
+func (pat *DragPattern) VTable() *DragPatternVtbl {
+	return (*DragPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *DragPattern) CurrentIsGrabbed() (bool, error) {
+	var isGrabbed bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentIsGrabbed,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isGrabbed)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isGrabbed, nil
+}
+
+func (pat *DragPattern) CachedIsGrabbed() (bool, error) {
+	var isGrabbed bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedIsGrabbed,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isGrabbed)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return isGrabbed, nil
+}
+
+func (pat *DragPattern) CurrentDropEffect() (string, error) {
+	var dropEffect *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDropEffect,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropEffect)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dropEffect), nil
+}
+
+func (pat *DragPattern) CachedDropEffect() (string, error) {
+	var dropEffect *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDropEffect,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropEffect)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dropEffect), nil
+}
+
+func (pat *DragPattern) CurrentDropEffects() (*ole.SafeArray, error) {
+	var dropEffects *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDropEffects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropEffects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return dropEffects, nil
+}
+
+func (pat *DragPattern) CachedDropEffects() (*ole.SafeArray, error) {
+	var dropEffects *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDropEffects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropEffects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return dropEffects, nil
+}
+
+func (pat *DragPattern) GetCurrentGrabbedItems() (*ElementArray, error) {
+	var grabbedItems *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentGrabbedItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&grabbedItems)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return grabbedItems, nil
+}
+
+func (pat *DragPattern) GetCachedGrabbedItems() (*ElementArray, error) {
+	var grabbedItems *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedGrabbedItems,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&grabbedItems)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return grabbedItems, nil
+}
+
+type DropTargetPattern struct {
+	ole.IUnknown
+}
+
+type DropTargetPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentDropTargetEffect  uintptr
+	Get_CachedDropTargetEffect   uintptr
+	Get_CurrentDropTargetEffects uintptr
+	Get_CachedDropTargetEffects  uintptr
+}
+
+func (pat *DropTargetPattern) VTable() *DropTargetPatternVtbl {
+	return (*DropTargetPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *DropTargetPattern) CurrentDropTargetEffect() (string, error) {
+	var dropTargetEffect *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDropTargetEffect,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropTargetEffect)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dropTargetEffect), nil
+}
+
+func (pat *DropTargetPattern) CachedDropTargetEffect() (string, error) {
+	var dropTargetEffect *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDropTargetEffect,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropTargetEffect)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dropTargetEffect), nil
+}
+
+func (pat *DropTargetPattern) CurrentDropTargetEffects() (*ole.SafeArray, error) {
+	var dropTargetEffects *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDropTargetEffects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropTargetEffects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return dropTargetEffects, nil
+}
+
+func (pat *DropTargetPattern) CachedDropTargetEffects() (*ole.SafeArray, error) {
+	var dropTargetEffects *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDropTargetEffects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dropTargetEffects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return dropTargetEffects, nil
+}
+
+type TextEditPattern struct {
+	ole.IUnknown
+}
+
+type TextEditPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetActiveComposition uintptr
+	GetConversionTarget  uintptr
+}
+
+func (pat *TextEditPattern) VTable() *TextEditPatternVtbl {
+	return (*TextEditPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TextEditPattern) GetActiveComposition() (*TextRange, error) {
+	var composition *TextRange
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetActiveComposition,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&composition)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return composition, nil
+}
+
+func (pat *TextEditPattern) GetConversionTarget() (*TextRange, error) {
+	var conversionTarget *TextRange
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetConversionTarget,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&conversionTarget)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return conversionTarget, nil
+}
+
+type CustomNavigationPattern struct {
+	ole.IUnknown
+}
+
+type CustomNavigationPatternVtbl struct {
+	ole.IUnknownVtbl
+	Navigate uintptr
+}
+
+func (pat *CustomNavigationPattern) VTable() *CustomNavigationPatternVtbl {
+	return (*CustomNavigationPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *CustomNavigationPattern) Navigate(direction NavigateDirection) (*Element, error) {
+	var element *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Navigate,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(direction),
+		uintptr(unsafe.Pointer(&element)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return element, nil
 }

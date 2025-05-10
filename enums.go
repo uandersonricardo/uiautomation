@@ -123,3 +123,13 @@ const (
 	ZoomUnitLargeIncrement
 	ZoomUnitSmallIncrement
 )
+
+type NavigateDirection uint32
+
+const (
+	NavigateDirectionParent NavigateDirection = iota
+	NavigateDirectionNextSibling
+	NavigateDirectionPreviousSibling
+	NavigateDirectionFirstChild
+	NavigateDirectionLastChild
+)
