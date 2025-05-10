@@ -254,16 +254,16 @@ func (elem *Element) CurrentBoundingRectangle() (Rect, error) {
 	return retVal, nil
 }
 
-func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (ole.VARIANT, error) {
-	var retVal ole.VARIANT
+func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
+	var retVal *ole.VARIANT
 
-	ole.VariantInit(&retVal)
+	ole.VariantInit(retVal)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPropertyValue,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(propertyId),
-		uintptr(unsafe.Pointer(&retVal)),
+		uintptr(unsafe.Pointer(retVal)),
 	)
 
 	if hr != 0 {

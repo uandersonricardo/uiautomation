@@ -113,3 +113,13 @@ const (
 	SynchronizedInputTypeRightMouseUp   SynchronizedInputType = 0x10
 	SynchronizedInputTypeRightMouseDown SynchronizedInputType = 0x20
 )
+
+type ZoomUnit uint32
+
+const (
+	ZoomUnitNoAmount ZoomUnit = iota
+	ZoomUnitLargeDecrement
+	ZoomUnitSmallDecrement
+	ZoomUnitLargeIncrement
+	ZoomUnitSmallIncrement
+)

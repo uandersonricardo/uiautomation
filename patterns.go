@@ -3037,3 +3037,631 @@ func (pat *TextPattern2) GetCaretRange() (bool, *TextRange, error) {
 
 	return isActive, rangeObj, nil
 }
+
+type StylesPattern struct {
+	ole.IUnknown
+}
+
+type StylesPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentStyleId                  uintptr
+	Get_CurrentStyleName                uintptr
+	Get_CurrentFillColor                uintptr
+	Get_CurrentFillPatternStyle         uintptr
+	Get_CurrentShape                    uintptr
+	Get_CurrentFillPatternColor         uintptr
+	Get_CurrentExtendedProperties       uintptr
+	GetCurrentExtendedPropertiesAsArray uintptr
+	Get_CachedStyleId                   uintptr
+	Get_CachedStyleName                 uintptr
+	Get_CachedFillColor                 uintptr
+	Get_CachedFillPatternStyle          uintptr
+	Get_CachedShape                     uintptr
+	Get_CachedFillPatternColor          uintptr
+	Get_CachedExtendedProperties        uintptr
+	GetCachedExtendedPropertiesAsArray  uintptr
+}
+
+func (pat *StylesPattern) VTable() *StylesPatternVtbl {
+	return (*StylesPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *StylesPattern) CurrentStyleId() (int32, error) {
+	var styleId int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentStyleId,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&styleId)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return styleId, nil
+}
+
+func (pat *StylesPattern) CurrentStyleName() (string, error) {
+	var styleName *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentStyleName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&styleName)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(styleName), nil
+}
+
+func (pat *StylesPattern) CurrentFillColor() (int32, error) {
+	var fillColor int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentFillColor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&fillColor)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return fillColor, nil
+}
+
+func (pat *StylesPattern) CurrentFillPatternStyle() (string, error) {
+	var patternStyle *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentFillPatternStyle,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&patternStyle)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(patternStyle), nil
+}
+
+func (pat *StylesPattern) CurrentShape() (string, error) {
+	var shape *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentShape,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&shape)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(shape), nil
+}
+
+func (pat *StylesPattern) CurrentFillPatternColor() (int32, error) {
+	var patternColor int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentFillPatternColor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&patternColor)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return patternColor, nil
+}
+
+func (pat *StylesPattern) CurrentExtendedProperties() (string, error) {
+	var properties *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentExtendedProperties,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&properties)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(properties), nil
+}
+
+func (pat *StylesPattern) GetCurrentExtendedPropertiesAsArray() ([]ExtendedProperty, error) {
+	var propertiesPtr *ExtendedProperty
+	var count int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentExtendedPropertiesAsArray,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&propertiesPtr)),
+		uintptr(unsafe.Pointer(&count)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	slice := (*[1 << 30]ExtendedProperty)(unsafe.Pointer(propertiesPtr))[:count:count]
+	properties := make([]ExtendedProperty, count)
+	copy(properties, slice)
+
+	ole.CoTaskMemFree(uintptr(unsafe.Pointer(propertiesPtr)))
+
+	return properties, nil
+}
+
+func (pat *StylesPattern) CachedStyleId() (int32, error) {
+	var styleId int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedStyleId,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&styleId)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return styleId, nil
+}
+
+func (pat *StylesPattern) CachedStyleName() (string, error) {
+	var styleName *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedStyleName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&styleName)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(styleName), nil
+}
+
+func (pat *StylesPattern) CachedFillColor() (int32, error) {
+	var fillColor int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedFillColor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&fillColor)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return fillColor, nil
+}
+
+func (pat *StylesPattern) CachedFillPatternStyle() (string, error) {
+	var patternStyle *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedFillPatternStyle,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&patternStyle)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(patternStyle), nil
+}
+
+func (pat *StylesPattern) CachedShape() (string, error) {
+	var shape *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedShape,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&shape)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(shape), nil
+}
+
+func (pat *StylesPattern) CachedFillPatternColor() (int32, error) {
+	var patternColor int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedFillPatternColor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&patternColor)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return patternColor, nil
+}
+
+func (pat *StylesPattern) CachedExtendedProperties() (string, error) {
+	var properties *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedExtendedProperties,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&properties)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(properties), nil
+}
+
+func (pat *StylesPattern) GetCachedExtendedPropertiesAsArray() ([]ExtendedProperty, error) {
+	var propertiesPtr *ExtendedProperty
+	var count int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedExtendedPropertiesAsArray,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&propertiesPtr)),
+		uintptr(unsafe.Pointer(&count)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	slice := (*[1 << 30]ExtendedProperty)(unsafe.Pointer(propertiesPtr))[:count:count]
+	properties := make([]ExtendedProperty, count)
+	copy(properties, slice)
+
+	ole.CoTaskMemFree(uintptr(unsafe.Pointer(propertiesPtr)))
+
+	return properties, nil
+}
+
+type SpreadsheetPattern struct {
+	ole.IUnknown
+}
+
+type SpreadsheetPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetItemByName uintptr
+}
+
+func (pat *SpreadsheetPattern) VTable() *SpreadsheetPatternVtbl {
+	return (*SpreadsheetPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *SpreadsheetPattern) GetItemByName(name string) (*Element, error) {
+	namePtr, err := syscall.UTF16PtrFromString(name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var item *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetItemByName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(namePtr)),
+		uintptr(unsafe.Pointer(&item)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return item, nil
+}
+
+type SpreadsheetItemPattern struct {
+	ole.IUnknown
+}
+
+type SpreadsheetItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentFormula          uintptr
+	GetCurrentAnnotationObjects uintptr
+	GetCurrentAnnotationTypes   uintptr
+	Get_CachedFormula           uintptr
+	GetCachedAnnotationObjects  uintptr
+	GetCachedAnnotationTypes    uintptr
+}
+
+func (pat *SpreadsheetItemPattern) VTable() *SpreadsheetItemPatternVtbl {
+	return (*SpreadsheetItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *SpreadsheetItemPattern) CurrentFormula() (string, error) {
+	var formula *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentFormula,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&formula)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(formula), nil
+}
+
+func (pat *SpreadsheetItemPattern) GetCurrentAnnotationObjects() (*ElementArray, error) {
+	var objects *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentAnnotationObjects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&objects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return objects, nil
+}
+
+func (pat *SpreadsheetItemPattern) GetCurrentAnnotationTypes() (*ole.SafeArray, error) {
+	var types *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCurrentAnnotationTypes,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&types)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return types, nil
+}
+
+func (pat *SpreadsheetItemPattern) CachedFormula() (string, error) {
+	var formula *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedFormula,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&formula)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(formula), nil
+}
+
+func (pat *SpreadsheetItemPattern) GetCachedAnnotationObjects() (*ElementArray, error) {
+	var objects *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedAnnotationObjects,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&objects)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return objects, nil
+}
+
+func (pat *SpreadsheetItemPattern) GetCachedAnnotationTypes() (*ole.SafeArray, error) {
+	var types *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCachedAnnotationTypes,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&types)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return types, nil
+}
+
+type TransformPattern2 struct {
+	TransformPattern
+}
+
+type TransformPattern2Vtbl struct {
+	TransformPatternVtbl
+	Zoom                   uintptr
+	ZoomByUnit             uintptr
+	Get_CurrentCanZoom     uintptr
+	Get_CachedCanZoom      uintptr
+	Get_CurrentZoomLevel   uintptr
+	Get_CachedZoomLevel    uintptr
+	Get_CurrentZoomMinimum uintptr
+	Get_CachedZoomMinimum  uintptr
+	Get_CurrentZoomMaximum uintptr
+	Get_CachedZoomMaximum  uintptr
+}
+
+func (pat *TransformPattern2) VTable() *TransformPattern2Vtbl {
+	return (*TransformPattern2Vtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TransformPattern2) Zoom(zoomValue float64) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Zoom,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(zoomValue),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *TransformPattern2) ZoomByUnit(zoomUnit ZoomUnit) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().ZoomByUnit,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(zoomUnit),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *TransformPattern2) CurrentCanZoom() (bool, error) {
+	var canZoom bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentCanZoom,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canZoom)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canZoom, nil
+}
+
+func (pat *TransformPattern2) CachedCanZoom() (bool, error) {
+	var canZoom bool
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedCanZoom,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&canZoom)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return canZoom, nil
+}
+
+func (pat *TransformPattern2) CurrentZoomLevel() (float64, error) {
+	var zoomLevel float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentZoomLevel,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomLevel)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomLevel, nil
+}
+
+func (pat *TransformPattern2) CachedZoomLevel() (float64, error) {
+	var zoomLevel float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedZoomLevel,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomLevel)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomLevel, nil
+}
+
+func (pat *TransformPattern2) CurrentZoomMinimum() (float64, error) {
+	var zoomMin float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentZoomMinimum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomMin)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomMin, nil
+}
+
+func (pat *TransformPattern2) CachedZoomMinimum() (float64, error) {
+	var zoomMin float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedZoomMinimum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomMin)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomMin, nil
+}
+
+func (pat *TransformPattern2) CurrentZoomMaximum() (float64, error) {
+	var zoomMax float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentZoomMaximum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomMax)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomMax, nil
+}
+
+func (pat *TransformPattern2) CachedZoomMaximum() (float64, error) {
+	var zoomMax float64
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedZoomMaximum,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&zoomMax)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return zoomMax, nil
+}
