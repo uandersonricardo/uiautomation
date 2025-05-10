@@ -179,8 +179,9 @@ func (pfe *ProxyFactoryEntry) VTable() *ProxyFactoryEntryVtbl {
 }
 
 type ProxyFactoryMapping struct {
-	vtbl *ole.IUnknown
+	ole.IUnknown
 }
+
 type ProxyFactoryMappingVtbl struct {
 	ole.IUnknownVtbl
 	Get_Count           uintptr
@@ -195,7 +196,7 @@ type ProxyFactoryMappingVtbl struct {
 }
 
 func (pfm *ProxyFactoryMapping) VTable() *ProxyFactoryMappingVtbl {
-	return (*ProxyFactoryMappingVtbl)(unsafe.Pointer(pfm.vtbl.RawVTable))
+	return (*ProxyFactoryMappingVtbl)(unsafe.Pointer(pfm.RawVTable))
 }
 
 type RawElementProviderSimple struct {

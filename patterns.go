@@ -2710,3 +2710,330 @@ func (pat *ItemContainerPattern) FindItemByProperty(startAfter *Element, propert
 
 	return item, nil
 }
+
+type VirtualizedItemPattern struct {
+	ole.IUnknown
+}
+
+type VirtualizedItemPatternVtbl struct {
+	ole.IUnknownVtbl
+	Realize uintptr
+}
+
+func (pat *VirtualizedItemPattern) VTable() *VirtualizedItemPatternVtbl {
+	return (*VirtualizedItemPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *VirtualizedItemPattern) Realize() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Realize,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+type SynchronizedInputPattern struct {
+	ole.IUnknown
+}
+
+type SynchronizedInputPatternVtbl struct {
+	ole.IUnknownVtbl
+	StartListening uintptr
+	Cancel         uintptr
+}
+
+func (pat *SynchronizedInputPattern) VTable() *SynchronizedInputPatternVtbl {
+	return (*SynchronizedInputPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *SynchronizedInputPattern) StartListening(inputType SynchronizedInputType) error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().StartListening,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(inputType),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+func (pat *SynchronizedInputPattern) Cancel() error {
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Cancel,
+		uintptr(unsafe.Pointer(pat)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
+}
+
+type ObjectModelPattern struct {
+	ole.IUnknown
+}
+
+type ObjectModelPatternVtbl struct {
+	ole.IUnknownVtbl
+	GetUnderlyingObjectModel uintptr
+}
+
+func (pat *ObjectModelPattern) VTable() *ObjectModelPatternVtbl {
+	return (*ObjectModelPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *ObjectModelPattern) GetUnderlyingObjectModel() (*ole.IUnknown, error) {
+	var obj *ole.IUnknown
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetUnderlyingObjectModel,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&obj)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return obj, nil
+}
+
+type AnnotationPattern struct {
+	ole.IUnknown
+}
+
+type AnnotationPatternVtbl struct {
+	ole.IUnknownVtbl
+	Get_CurrentAnnotationTypeId   uintptr
+	Get_CurrentAnnotationTypeName uintptr
+	Get_CurrentAuthor             uintptr
+	Get_CurrentDateTime           uintptr
+	Get_CurrentTarget             uintptr
+	Get_CachedAnnotationTypeId    uintptr
+	Get_CachedAnnotationTypeName  uintptr
+	Get_CachedAuthor              uintptr
+	Get_CachedDateTime            uintptr
+	Get_CachedTarget              uintptr
+}
+
+func (pat *AnnotationPattern) VTable() *AnnotationPatternVtbl {
+	return (*AnnotationPatternVtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *AnnotationPattern) CurrentAnnotationTypeId() (int32, error) {
+	var typeId int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentAnnotationTypeId,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&typeId)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return typeId, nil
+}
+
+func (pat *AnnotationPattern) CurrentAnnotationTypeName() (string, error) {
+	var typeName *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentAnnotationTypeName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&typeName)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(typeName), nil
+}
+
+func (pat *AnnotationPattern) CurrentAuthor() (string, error) {
+	var author *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentAuthor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&author)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(author), nil
+}
+
+func (pat *AnnotationPattern) CurrentDateTime() (string, error) {
+	var dateTime *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentDateTime,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dateTime)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dateTime), nil
+}
+
+func (pat *AnnotationPattern) CurrentTarget() (*Element, error) {
+	var target *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CurrentTarget,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&target)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return target, nil
+}
+
+func (pat *AnnotationPattern) CachedAnnotationTypeId() (int32, error) {
+	var typeId int32
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedAnnotationTypeId,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&typeId)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return typeId, nil
+}
+
+func (pat *AnnotationPattern) CachedAnnotationTypeName() (string, error) {
+	var typeName *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedAnnotationTypeName,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&typeName)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(typeName), nil
+}
+
+func (pat *AnnotationPattern) CachedAuthor() (string, error) {
+	var author *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedAuthor,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&author)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(author), nil
+}
+
+func (pat *AnnotationPattern) CachedDateTime() (string, error) {
+	var dateTime *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedDateTime,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&dateTime)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(dateTime), nil
+}
+
+func (pat *AnnotationPattern) CachedTarget() (*Element, error) {
+	var target *Element
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().Get_CachedTarget,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&target)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return target, nil
+}
+
+type TextPattern2 struct {
+	TextPattern
+}
+
+type TextPattern2Vtbl struct {
+	TextPatternVtbl
+	RangeFromAnnotation uintptr
+	GetCaretRange       uintptr
+}
+
+func (pat *TextPattern2) VTable() *TextPattern2Vtbl {
+	return (*TextPattern2Vtbl)(unsafe.Pointer(pat.RawVTable))
+}
+
+func (pat *TextPattern2) RangeFromAnnotation(annotation *Element) (*TextRange, error) {
+	var rangeObj *TextRange
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().RangeFromAnnotation,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(annotation)),
+		uintptr(unsafe.Pointer(&rangeObj)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return rangeObj, nil
+}
+
+func (pat *TextPattern2) GetCaretRange() (bool, *TextRange, error) {
+	var isActive bool
+	var rangeObj *TextRange
+
+	hr, _, _ := syscall.SyscallN(
+		pat.VTable().GetCaretRange,
+		uintptr(unsafe.Pointer(pat)),
+		uintptr(unsafe.Pointer(&isActive)),
+		uintptr(unsafe.Pointer(&rangeObj)),
+	)
+
+	if hr != 0 {
+		return false, nil, ole.NewError(hr)
+	}
+
+	return isActive, rangeObj, nil
+}

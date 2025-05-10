@@ -102,3 +102,14 @@ const (
 	ToggleStateOn
 	ToggleStateIndeterminate
 )
+
+type SynchronizedInputType uint32
+
+const (
+	SynchronizedInputTypeKeyUp          SynchronizedInputType = 0x1
+	SynchronizedInputTypeKeyDown        SynchronizedInputType = 0x2
+	SynchronizedInputTypeLeftMouseUp    SynchronizedInputType = 0x4
+	SynchronizedInputTypeLeftMouseDown  SynchronizedInputType = 0x8
+	SynchronizedInputTypeRightMouseUp   SynchronizedInputType = 0x10
+	SynchronizedInputTypeRightMouseDown SynchronizedInputType = 0x20
+)
