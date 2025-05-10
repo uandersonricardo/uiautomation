@@ -86,3 +86,19 @@ const (
 	RowOrColumnMajorColumnMajor
 	RowOrColumnMajorIndeterminate
 )
+
+type SupportedTextSelection uint32
+
+const (
+	SupportedTextSelectionNone SupportedTextSelection = iota
+	SupportedTextSelectionSingle
+	SupportedTextSelectionMultiple
+)
+
+type ToggleState uint32
+
+const (
+	ToggleStateOff ToggleState = iota
+	ToggleStateOn
+	ToggleStateIndeterminate
+)
