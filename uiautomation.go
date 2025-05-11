@@ -792,7 +792,9 @@ func (auto *UIAutomation) IntSafeArrayToNativeArray(safeArray *ole.SafeArray) ([
 }
 
 func (auto *UIAutomation) RectToVariant(rect Rect) (*ole.VARIANT, error) {
-	var variant *ole.VARIANT
+	variant := &ole.VARIANT{}
+
+	ole.VariantInit(variant)
 
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().RectToVariant,
@@ -802,6 +804,7 @@ func (auto *UIAutomation) RectToVariant(rect Rect) (*ole.VARIANT, error) {
 	)
 
 	if hr != 0 {
+		ole.VariantClear(variant)
 		return nil, ole.NewError(hr)
 	}
 

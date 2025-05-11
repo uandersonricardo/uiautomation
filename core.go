@@ -879,7 +879,9 @@ func (rep *RawElementProviderSimple) GetPatternProvider(patternId PatternId) (*o
 }
 
 func (rep *RawElementProviderSimple) GetPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		rep.VTable().GetPropertyValue,
@@ -889,6 +891,7 @@ func (rep *RawElementProviderSimple) GetPropertyValue(propertyId PropertyId) (*o
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return nil, ole.NewError(hr)
 	}
 
@@ -1113,7 +1116,9 @@ func (tr *TextRange) FindText(text string, backward, ignoreCase bool) (*TextRang
 }
 
 func (tr *TextRange) GetAttributeValue(attributeId AttributeId) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		tr.VTable().GetAttributeValue,
@@ -1123,6 +1128,7 @@ func (tr *TextRange) GetAttributeValue(attributeId AttributeId) (*ole.VARIANT, e
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return nil, ole.NewError(hr)
 	}
 
