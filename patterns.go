@@ -204,16 +204,13 @@ func (pat *ValuePattern) VTable() *ValuePatternVtbl {
 }
 
 func (pat *ValuePattern) SetValue(value string) error {
-	valuePtr, err := syscall.UTF16PtrFromString(value)
-
-	if err != nil {
-		return err
-	}
+	bstr := ole.SysAllocString(value)
+	defer ole.SysFreeString(bstr)
 
 	hr, _, _ := syscall.SyscallN(
 		pat.VTable().SetValue,
 		uintptr(unsafe.Pointer(pat)),
-		uintptr(unsafe.Pointer(valuePtr)),
+		uintptr(unsafe.Pointer(bstr)),
 	)
 
 	if hr != 0 {
@@ -2325,16 +2322,13 @@ func (pat *LegacyAccessiblePattern) DoDefaultAction() error {
 }
 
 func (pat *LegacyAccessiblePattern) SetValue(value string) error {
-	valuePtr, err := syscall.UTF16PtrFromString(value)
-
-	if err != nil {
-		return err
-	}
+	bstr := ole.SysAllocString(value)
+	defer ole.SysFreeString(bstr)
 
 	hr, _, _ := syscall.SyscallN(
 		pat.VTable().SetValue,
 		uintptr(unsafe.Pointer(pat)),
-		uintptr(unsafe.Pointer(valuePtr)),
+		uintptr(unsafe.Pointer(bstr)),
 	)
 
 	if hr != 0 {
@@ -3353,18 +3347,15 @@ func (pat *SpreadsheetPattern) VTable() *SpreadsheetPatternVtbl {
 }
 
 func (pat *SpreadsheetPattern) GetItemByName(name string) (*Element, error) {
-	namePtr, err := syscall.UTF16PtrFromString(name)
-
-	if err != nil {
-		return nil, err
-	}
+	bstr := ole.SysAllocString(name)
+	defer ole.SysFreeString(bstr)
 
 	var item *Element
 
 	hr, _, _ := syscall.SyscallN(
 		pat.VTable().GetItemByName,
 		uintptr(unsafe.Pointer(pat)),
-		uintptr(unsafe.Pointer(namePtr)),
+		uintptr(unsafe.Pointer(bstr)),
 		uintptr(unsafe.Pointer(&item)),
 	)
 

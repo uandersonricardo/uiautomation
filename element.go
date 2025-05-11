@@ -114,6 +114,22 @@ func (elem *Element) SetFocus() error {
 	return nil
 }
 
+func (elem *Element) GetRuntimeId() (*ole.SafeArray, error) {
+	var runtimeId *ole.SafeArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetRuntimeId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&runtimeId)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return runtimeId, nil
+}
+
 func (elem *Element) FindFirst(scope TreeScope, condition *Condition) (*Element, error) {
 	var found *Element
 
@@ -130,6 +146,185 @@ func (elem *Element) FindFirst(scope TreeScope, condition *Condition) (*Element,
 	}
 
 	return found, nil
+}
+
+func (elem *Element) FindAll(scope TreeScope, condition *Condition) (*ElementArray, error) {
+	var found *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindAll,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(&found)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return found, nil
+}
+
+func (elem *Element) FindFirstBuildCache(scope TreeScope, condition *Condition, cacheRequest *CacheRequest) (*Element, error) {
+	var found *Element
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindFirstBuildCache,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(cacheRequest)),
+		uintptr(unsafe.Pointer(&found)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return found, nil
+}
+
+func (elem *Element) FindAllBuildCache(scope TreeScope, condition *Condition, cacheRequest *CacheRequest) (*ElementArray, error) {
+	var found *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().FindAllBuildCache,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(scope),
+		uintptr(unsafe.Pointer(condition)),
+		uintptr(unsafe.Pointer(cacheRequest)),
+		uintptr(unsafe.Pointer(&found)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return found, nil
+}
+
+func (elem *Element) BuildUpdatedCache(cacheRequest *CacheRequest) (*Element, error) {
+	var updated *Element
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().BuildUpdatedCache,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(cacheRequest)),
+		uintptr(unsafe.Pointer(&updated)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return updated, nil
+}
+
+func (elem *Element) GetCurrentPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
+	var value *ole.VARIANT
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCurrentPropertyValue,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(propertyId),
+		uintptr(unsafe.Pointer(value)),
+	)
+
+	if hr != 0 {
+		return value, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (elem *Element) GetCurrentPropertyValueEx(propertyId PropertyId, ignoreDefaultValue bool) (*ole.VARIANT, error) {
+	var value *ole.VARIANT
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCurrentPropertyValueEx,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(propertyId),
+		uintptr(unsafe.Pointer(&ignoreDefaultValue)),
+		uintptr(unsafe.Pointer(value)),
+	)
+
+	if hr != 0 {
+		return value, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (elem *Element) GetCachedPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
+	var value *ole.VARIANT
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedPropertyValue,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(propertyId),
+		uintptr(unsafe.Pointer(value)),
+	)
+
+	if hr != 0 {
+		return value, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (elem *Element) GetCachedPropertyValueEx(propertyId PropertyId, ignoreDefaultValue bool) (*ole.VARIANT, error) {
+	var value *ole.VARIANT
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedPropertyValueEx,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(propertyId),
+		uintptr(unsafe.Pointer(&ignoreDefaultValue)),
+		uintptr(unsafe.Pointer(value)),
+	)
+
+	if hr != 0 {
+		return value, ole.NewError(hr)
+	}
+
+	return value, nil
+}
+
+func (elem *Element) GetCurrentPatternAs(patternId PatternId, riid *ole.GUID) (*ole.IUnknown, error) {
+	var patternObject *ole.IUnknown
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCurrentPatternAs,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(patternId),
+		uintptr(unsafe.Pointer(riid)),
+		uintptr(unsafe.Pointer(&patternObject)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return patternObject, nil
+}
+
+func (elem *Element) GetCachedPatternAs(patternId PatternId, riid *ole.GUID) (*ole.IUnknown, error) {
+	var patternObject *ole.IUnknown
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedPatternAs,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(patternId),
+		uintptr(unsafe.Pointer(riid)),
+		uintptr(unsafe.Pointer(&patternObject)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return patternObject, nil
 }
 
 func (elem *Element) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, error) {
@@ -149,6 +344,71 @@ func (elem *Element) GetCurrentPattern(patternId PatternId) (*ole.IUnknown, erro
 	return patternObject, nil
 }
 
+func (elem *Element) GetCachedPattern(patternId PatternId) (*ole.IUnknown, error) {
+	var patternObject *ole.IUnknown
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedPattern,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(patternId),
+		uintptr(unsafe.Pointer(&patternObject)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return patternObject, nil
+}
+
+func (elem *Element) GetCachedParent() (*Element, error) {
+	var parent *Element
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedParent,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&parent)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return parent, nil
+}
+
+func (elem *Element) GetCachedChildren() (*ElementArray, error) {
+	var children *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetCachedChildren,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&children)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return children, nil
+}
+
+func (elem *Element) CurrentProcessId() (int32, error) {
+	var retVal int32
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentProcessId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
 func (elem *Element) CurrentControlType() (ControlTypeId, error) {
 	var retVal ControlTypeId
 
@@ -165,6 +425,22 @@ func (elem *Element) CurrentControlType() (ControlTypeId, error) {
 	return retVal, nil
 }
 
+func (elem *Element) CurrentLocalizedControlType() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentLocalizedControlType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
 func (elem *Element) CurrentName() (string, error) {
 	var retVal *uint16
 
@@ -179,6 +455,86 @@ func (elem *Element) CurrentName() (string, error) {
 	}
 
 	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentAcceleratorKey() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentAcceleratorKey,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentAccessKey() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentAccessKey,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentHasKeyboardFocus() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentHasKeyboardFocus,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentIsKeyboardFocusable() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsKeyboardFocusable,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentIsEnabled() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsEnabled,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
 }
 
 func (elem *Element) CurrentAutomationId() (string, error) {
@@ -213,6 +569,86 @@ func (elem *Element) CurrentClassName() (string, error) {
 	return ole.BstrToString(retVal), nil
 }
 
+func (elem *Element) CurrentHelpText() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentHelpText,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentCulture() (int32, error) {
+	var retVal int32
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentCulture,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentIsControlElement() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsControlElement,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentIsContentElement() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsContentElement,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentIsPassword() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsPassword,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
 func (elem *Element) CurrentNativeWindowHandle() (syscall.Handle, error) {
 	var retVal syscall.Handle
 
@@ -227,6 +663,102 @@ func (elem *Element) CurrentNativeWindowHandle() (syscall.Handle, error) {
 	}
 
 	return retVal, nil
+}
+
+func (elem *Element) CurrentItemType() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentItemType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentIsOffscreen() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsOffscreen,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentOrientation() (OrientationType, error) {
+	var retVal OrientationType
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentOrientation,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentFrameworkId() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentFrameworkId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentIsRequiredForForm() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsRequiredForForm,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentItemStatus() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentItemStatus,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
 }
 
 func (elem *Element) CurrentBoundingRectangle() (Rect, error) {
@@ -245,23 +777,662 @@ func (elem *Element) CurrentBoundingRectangle() (Rect, error) {
 	return retVal, nil
 }
 
-func (elem *Element) CurrentPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
-	var retVal *ole.VARIANT
-
-	ole.VariantInit(retVal)
+func (elem *Element) CurrentLabeledBy() (*Element, error) {
+	var retVal *Element
 
 	hr, _, _ := syscall.SyscallN(
-		elem.VTable().GetCurrentPropertyValue,
+		elem.VTable().Get_CurrentLabeledBy,
 		uintptr(unsafe.Pointer(elem)),
-		uintptr(propertyId),
-		uintptr(unsafe.Pointer(retVal)),
+		uintptr(unsafe.Pointer(&retVal)),
 	)
 
 	if hr != 0 {
-		return retVal, ole.NewError(hr)
+		return nil, ole.NewError(hr)
 	}
 
 	return retVal, nil
+}
+
+func (elem *Element) CurrentAriaRole() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentAriaRole,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentAriaProperties() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentAriaProperties,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CurrentIsDataValidForForm() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentIsDataValidForForm,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentControllerFor() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentControllerFor,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentDescribedBy() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentDescribedBy,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentFlowsTo() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentFlowsTo,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CurrentProviderDescription() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CurrentProviderDescription,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedProcessId() (int32, error) {
+	var retVal int32
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedProcessId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedControlType() (ControlTypeId, error) {
+	var retVal ControlTypeId
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedControlType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedLocalizedControlType() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedLocalizedControlType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedName() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedName,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedAcceleratorKey() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedAcceleratorKey,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedAccessKey() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedAccessKey,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedHasKeyboardFocus() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedHasKeyboardFocus,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedIsKeyboardFocusable() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsKeyboardFocusable,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedIsEnabled() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsEnabled,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedAutomationId() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedAutomationId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedClassName() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedClassName,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedHelpText() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedHelpText,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedCulture() (int32, error) {
+	var retVal int32
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedCulture,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedIsControlElement() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsControlElement,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedIsContentElement() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsContentElement,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedIsPassword() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsPassword,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedNativeWindowHandle() (syscall.Handle, error) {
+	var retVal syscall.Handle
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedNativeWindowHandle,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedItemType() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedItemType,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedIsOffscreen() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsOffscreen,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedOrientation() (OrientationType, error) {
+	var retVal OrientationType
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedOrientation,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return 0, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedFrameworkId() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedFrameworkId,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedIsRequiredForForm() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsRequiredForForm,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedItemStatus() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedItemStatus,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedBoundingRectangle() (Rect, error) {
+	var retVal Rect
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedBoundingRectangle,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return Rect{}, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedLabeledBy() (*Element, error) {
+	var retVal *Element
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedLabeledBy,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedAriaRole() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedAriaRole,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedAriaProperties() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedAriaProperties,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) CachedIsDataValidForForm() (bool, error) {
+	var retVal bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedIsDataValidForForm,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return false, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedControllerFor() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedControllerFor,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedDescribedBy() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedDescribedBy,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedFlowsTo() (*ElementArray, error) {
+	var retVal *ElementArray
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedFlowsTo,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return nil, ole.NewError(hr)
+	}
+
+	return retVal, nil
+}
+
+func (elem *Element) CachedProviderDescription() (string, error) {
+	var retVal *uint16
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().Get_CachedProviderDescription,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&retVal)),
+	)
+
+	if hr != 0 {
+		return "", ole.NewError(hr)
+	}
+
+	return ole.BstrToString(retVal), nil
+}
+
+func (elem *Element) ClickablePoint() (Point, bool, error) {
+	var clickable Point
+	var gotClickable bool
+
+	hr, _, _ := syscall.SyscallN(
+		elem.VTable().GetClickablePoint,
+		uintptr(unsafe.Pointer(elem)),
+		uintptr(unsafe.Pointer(&clickable)),
+		uintptr(unsafe.Pointer(&gotClickable)),
+	)
+
+	if hr != 0 {
+		return Point{}, false, ole.NewError(hr)
+	}
+
+	return clickable, gotClickable, nil
 }
 
 func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
