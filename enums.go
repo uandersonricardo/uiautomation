@@ -133,3 +133,43 @@ const (
 	NavigateDirectionFirstChild
 	NavigateDirectionLastChild
 )
+
+type ProviderOptions uint32
+
+const (
+	ProviderOptionsClientSideProvider     ProviderOptions = 0x1
+	ProviderOptionsServerSideProvider     ProviderOptions = 0x2
+	ProviderOptionsNonClientAreaProvider  ProviderOptions = 0x4
+	ProviderOptionsOverrideProvider       ProviderOptions = 0x8
+	ProviderOptionsProviderOwnsSetFocus   ProviderOptions = 0x10
+	ProviderOptionsUseComThreading        ProviderOptions = 0x20
+	ProviderOptionsRefuseNonClientSupport ProviderOptions = 0x40
+	ProviderOptionsHasNativeIAccessible   ProviderOptions = 0x80
+	ProviderOptionsUseClientCoordinates   ProviderOptions = 0x100
+)
+
+type AutomationElementMode uint32
+
+const (
+	AutomationElementModeNone AutomationElementMode = iota
+	AutomationElementModeFull
+)
+
+type TextPatternRangeEndpoint uint32
+
+const (
+	TextPatternRangeEndpointStart TextPatternRangeEndpoint = iota
+	TextPatternRangeEndpointEnd
+)
+
+type TextUnit uint32
+
+const (
+	TextUnitCharacter TextUnit = iota
+	TextUnitFormat
+	TextUnitWord
+	TextUnitLine
+	TextUnitParagraph
+	TextUnitPage
+	TextUnitDocument
+)

@@ -347,16 +347,13 @@ func (ac *Accessible) DoDefaultAction() error {
 }
 
 func (ac *Accessible) SetName(name string) error {
-	namePtr, err := syscall.UTF16PtrFromString(name)
-
-	if err != nil {
-		return err
-	}
+	bstr := ole.SysAllocString(name)
+	defer ole.SysFreeString(bstr)
 
 	hr, _, _ := syscall.SyscallN(
 		ac.VTable().Put_accName,
 		uintptr(unsafe.Pointer(ac)),
-		uintptr(unsafe.Pointer(namePtr)),
+		uintptr(unsafe.Pointer(bstr)),
 	)
 
 	if hr != 0 {
@@ -367,16 +364,13 @@ func (ac *Accessible) SetName(name string) error {
 }
 
 func (ac *Accessible) SetValue(value string) error {
-	valuePtr, err := syscall.UTF16PtrFromString(value)
-
-	if err != nil {
-		return err
-	}
+	bstr := ole.SysAllocString(value)
+	defer ole.SysFreeString(bstr)
 
 	hr, _, _ := syscall.SyscallN(
 		ac.VTable().Put_accValue,
 		uintptr(unsafe.Pointer(ac)),
-		uintptr(unsafe.Pointer(valuePtr)),
+		uintptr(unsafe.Pointer(bstr)),
 	)
 
 	if hr != 0 {

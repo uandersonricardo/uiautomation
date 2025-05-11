@@ -897,11 +897,9 @@ func (auto *UIAutomation) GetPropertyProgrammaticName(propertyId PropertyId) (st
 		return "", ole.NewError(hr)
 	}
 
-	str := ole.BstrToString(name)
-	ole.CoTaskMemFree(uintptr(unsafe.Pointer(name)))
-
-	return str, nil
+	return ole.BstrToString(name), nil
 }
+
 func (auto *UIAutomation) GetPatternProgrammaticName(patternId PatternId) (string, error) {
 	var name *uint16
 
@@ -916,10 +914,7 @@ func (auto *UIAutomation) GetPatternProgrammaticName(patternId PatternId) (strin
 		return "", ole.NewError(hr)
 	}
 
-	str := ole.BstrToString(name)
-	ole.CoTaskMemFree(uintptr(unsafe.Pointer(name)))
-
-	return str, nil
+	return ole.BstrToString(name), nil
 }
 
 func (auto *UIAutomation) PollForPotentialSupportedPatterns(element *Element) ([]PatternId, error) {
@@ -1033,7 +1028,7 @@ func (auto *UIAutomation) ReservedMixedAttributeValue() (*ole.IUnknown, error) {
 	return value, nil
 }
 
-func (auto *UIAutomation) ElementFromIAccessible(accessible *Accessible, childId int32) (*Element, error) {
+func (auto *UIAutomation) ElementFromAccessible(accessible *Accessible, childId int32) (*Element, error) {
 	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
@@ -1051,7 +1046,7 @@ func (auto *UIAutomation) ElementFromIAccessible(accessible *Accessible, childId
 	return element, nil
 }
 
-func (auto *UIAutomation) ElementFromIAccessibleBuildCache(accessible *Accessible, childId int32, cacheRequest *CacheRequest) (*Element, error) {
+func (auto *UIAutomation) ElementFromAccessibleBuildCache(accessible *Accessible, childId int32, cacheRequest *CacheRequest) (*Element, error) {
 	var element *Element
 
 	hr, _, _ := syscall.SyscallN(
