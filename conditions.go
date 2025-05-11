@@ -176,15 +176,18 @@ func (c *PropertyCondition) PropertyId() (PropertyId, error) {
 }
 
 func (c *PropertyCondition) PropertyValue() (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		c.VTable().Get_PropertyValue,
 		uintptr(unsafe.Pointer(c)),
-		uintptr(unsafe.Pointer(&value)),
+		uintptr(unsafe.Pointer(value)),
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return nil, ole.NewError(hr)
 	}
 

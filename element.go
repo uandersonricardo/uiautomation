@@ -222,7 +222,9 @@ func (elem *Element) BuildUpdatedCache(cacheRequest *CacheRequest) (*Element, er
 }
 
 func (elem *Element) GetCurrentPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPropertyValue,
@@ -232,6 +234,7 @@ func (elem *Element) GetCurrentPropertyValue(propertyId PropertyId) (*ole.VARIAN
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return value, ole.NewError(hr)
 	}
 
@@ -239,7 +242,9 @@ func (elem *Element) GetCurrentPropertyValue(propertyId PropertyId) (*ole.VARIAN
 }
 
 func (elem *Element) GetCurrentPropertyValueEx(propertyId PropertyId, ignoreDefaultValue bool) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCurrentPropertyValueEx,
@@ -250,6 +255,7 @@ func (elem *Element) GetCurrentPropertyValueEx(propertyId PropertyId, ignoreDefa
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return value, ole.NewError(hr)
 	}
 
@@ -257,16 +263,19 @@ func (elem *Element) GetCurrentPropertyValueEx(propertyId PropertyId, ignoreDefa
 }
 
 func (elem *Element) GetCachedPropertyValue(propertyId PropertyId) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCachedPropertyValue,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(propertyId),
-		uintptr(unsafe.Pointer(value)),
+		uintptr(unsafe.Pointer(&value)),
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return value, ole.NewError(hr)
 	}
 
@@ -274,17 +283,20 @@ func (elem *Element) GetCachedPropertyValue(propertyId PropertyId) (*ole.VARIANT
 }
 
 func (elem *Element) GetCachedPropertyValueEx(propertyId PropertyId, ignoreDefaultValue bool) (*ole.VARIANT, error) {
-	var value *ole.VARIANT
+	value := &ole.VARIANT{}
+
+	ole.VariantInit(value)
 
 	hr, _, _ := syscall.SyscallN(
 		elem.VTable().GetCachedPropertyValueEx,
 		uintptr(unsafe.Pointer(elem)),
 		uintptr(propertyId),
 		uintptr(unsafe.Pointer(&ignoreDefaultValue)),
-		uintptr(unsafe.Pointer(value)),
+		uintptr(unsafe.Pointer(&value)),
 	)
 
 	if hr != 0 {
+		ole.VariantClear(value)
 		return value, ole.NewError(hr)
 	}
 
