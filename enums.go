@@ -173,3 +173,11 @@ const (
 	TextUnitPage
 	TextUnitDocument
 )
+
+type OrientationType uint32
+
+const (
+	OrientationTypeNone OrientationType = iota
+	OrientationTypeHorizontal
+	OrientationTypeVertical
+)
