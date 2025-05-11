@@ -90,13 +90,13 @@ func (eh *PropertyChangedEventHandler) VTable() *PropertyChangedEventHandlerVtbl
 	return (*PropertyChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
 }
 
-func (eh *PropertyChangedEventHandler) HandlePropertyChangedEvent(sender *Element, propertyId int32, newValue interface{}) error {
+func (eh *PropertyChangedEventHandler) HandlePropertyChangedEvent(element *Element, propertyId int32, newValue *ole.VARIANT) error {
 	hr, _, _ := syscall.SyscallN(
 		eh.VTable().HandlePropertyChangedEvent,
 		uintptr(unsafe.Pointer(eh)),
-		uintptr(unsafe.Pointer(sender)),
+		uintptr(unsafe.Pointer(element)),
 		uintptr(propertyId),
-		uintptr(unsafe.Pointer(&newValue)),
+		uintptr(unsafe.Pointer(newValue)),
 	)
 
 	if hr != 0 {
@@ -109,6 +109,7 @@ func (eh *PropertyChangedEventHandler) HandlePropertyChangedEvent(sender *Elemen
 type FocusChangedEventHandler struct {
 	ole.IUnknown
 }
+
 type FocusChangedEventHandlerVtbl struct {
 	ole.IUnknownVtbl
 	HandleFocusChangedEvent uintptr
@@ -135,6 +136,7 @@ func (eh *FocusChangedEventHandler) HandleFocusChangedEvent(element *Element) er
 type StructureChangedEventHandler struct {
 	ole.IUnknown
 }
+
 type StructureChangedEventHandlerVtbl struct {
 	ole.IUnknownVtbl
 	HandleStructureChangedEvent uintptr
@@ -144,6 +146,18 @@ func (eh *StructureChangedEventHandler) VTable() *StructureChangedEventHandlerVt
 	return (*StructureChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
 }
 
-func (eh *StructureChangedEventHandler) HandleStructureChangedEvent(sender *Element, changeType StructureChangeType, runtimeId []int32) error {
-	panic("Not implemented")
+func (eh *StructureChangedEventHandler) HandleStructureChangedEvent(element *Element, changeType StructureChangeType, runtimeId *ole.SafeArray) error {
+	hr, _, _ := syscall.SyscallN(
+		eh.VTable().HandleStructureChangedEvent,
+		uintptr(unsafe.Pointer(eh)),
+		uintptr(unsafe.Pointer(element)),
+		uintptr(changeType),
+		uintptr(unsafe.Pointer(runtimeId)),
+	)
+
+	if hr != 0 {
+		return ole.NewError(hr)
+	}
+
+	return nil
 }
