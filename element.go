@@ -2317,12 +2317,15 @@ func (elem *Element) NormalizeWindow() error {
 	}
 
 	windowPattern, err := elem.GetWindowPattern()
+	
 	if err != nil {
-		return fmt.Errorf("failed to get window pattern: %w", err)
+		return err
 	}
+	
 	defer windowPattern.Release()
 
 	state, err := windowPattern.CurrentWindowVisualState()
+	
 	if err != nil {
 		return fmt.Errorf("failed to get window visual state: %w", err)
 	}
