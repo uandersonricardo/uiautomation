@@ -2317,20 +2317,21 @@ func (elem *Element) NormalizeWindow() error {
 	}
 
 	windowPattern, err := elem.GetWindowPattern()
-
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to get window pattern: %w", err)
 	}
-
 	defer windowPattern.Release()
 
-	windowVisualState, err := windowPattern.CurrentWindowVisualState()
-
-	if err != nil || windowVisualState != WindowVisualStateNormal {
-		return windowPattern.SetWindowVisualState(WindowVisualStateNormal)
+	state, err := windowPattern.CurrentWindowVisualState()
+	if err != nil {
+		return fmt.Errorf("failed to get window visual state: %w", err)
 	}
 
-	return nil
+	if state == WindowVisualStateNormal {
+		return nil // already normalized
+	}
+
+	return windowPattern.SetWindowVisualState(WindowVisualStateNormal)
 }
 
 func (elem *Element) CloseWindow() error {
