@@ -887,7 +887,7 @@ func (rep *RawElementProviderSimple) GetPropertyValue(propertyId PropertyId) (*o
 		rep.VTable().GetPropertyValue,
 		uintptr(unsafe.Pointer(rep)),
 		uintptr(propertyId),
-		uintptr(unsafe.Pointer(&value)),
+		uintptr(unsafe.Pointer(value)),
 	)
 
 	if hr != 0 {
@@ -1124,7 +1124,7 @@ func (tr *TextRange) GetAttributeValue(attributeId AttributeId) (*ole.VARIANT, e
 		tr.VTable().GetAttributeValue,
 		uintptr(unsafe.Pointer(tr)),
 		uintptr(attributeId),
-		uintptr(unsafe.Pointer(&value)),
+		uintptr(unsafe.Pointer(value)),
 	)
 
 	if hr != 0 {
