@@ -46,6 +46,10 @@ func (walker *TreeWalker) GetParentElement(element *Element) (*Element, error) {
 		return nil, ole.NewError(hr)
 	}
 
+	if parent == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return parent, nil
 }
 
@@ -61,6 +65,10 @@ func (walker *TreeWalker) GetFirstChildElement(element *Element) (*Element, erro
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if first == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return first, nil
@@ -80,6 +88,10 @@ func (walker *TreeWalker) GetLastChildElement(element *Element) (*Element, error
 		return nil, ole.NewError(hr)
 	}
 
+	if last == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return last, nil
 }
 
@@ -95,6 +107,10 @@ func (walker *TreeWalker) GetNextSiblingElement(element *Element) (*Element, err
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if next == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return next, nil
@@ -114,6 +130,10 @@ func (walker *TreeWalker) GetPreviousSiblingElement(element *Element) (*Element,
 		return nil, ole.NewError(hr)
 	}
 
+	if previous == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return previous, nil
 }
 
@@ -129,6 +149,10 @@ func (walker *TreeWalker) NormalizeElement(element *Element) (*Element, error) {
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if normalized == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return normalized, nil
@@ -149,6 +173,10 @@ func (walker *TreeWalker) GetParentElementBuildCache(element *Element, cacheRequ
 		return nil, ole.NewError(hr)
 	}
 
+	if parent == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return parent, nil
 }
 
@@ -165,6 +193,10 @@ func (walker *TreeWalker) GetFirstChildElementBuildCache(element *Element, cache
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if first == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return first, nil
@@ -185,6 +217,10 @@ func (walker *TreeWalker) GetLastChildElementBuildCache(element *Element, cacheR
 		return nil, ole.NewError(hr)
 	}
 
+	if last == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return last, nil
 }
 
@@ -201,6 +237,10 @@ func (walker *TreeWalker) GetNextSiblingElementBuildCache(element *Element, cach
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if next == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return next, nil
@@ -221,6 +261,10 @@ func (walker *TreeWalker) GetPreviousSiblingElementBuildCache(element *Element, 
 		return nil, ole.NewError(hr)
 	}
 
+	if previous == nil {
+		return nil, ErrElementIsNil
+	}
+
 	return previous, nil
 }
 
@@ -237,6 +281,10 @@ func (walker *TreeWalker) NormalizeElementBuildCache(element *Element, cacheRequ
 
 	if hr != 0 {
 		return nil, ole.NewError(hr)
+	}
+
+	if normalized == nil {
+		return nil, ErrElementIsNil
 	}
 
 	return normalized, nil
