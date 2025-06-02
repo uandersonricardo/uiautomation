@@ -3,7 +3,7 @@ package uiautomation
 import "github.com/go-ole/go-ole"
 
 func CoInitialize() error {
-	return ole.CoInitialize(0)
+	return ole.CoInitializeEx(0, ole.COINIT_MULTITHREADED)
 }
 
 func CoUninitialize() {
