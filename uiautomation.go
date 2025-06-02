@@ -707,10 +707,11 @@ func (auto *UIAutomation) RemoveStructureChangedEventHandler(element *Element, h
 	return nil
 }
 
-func (auto *UIAutomation) AddFocusChangedEventHandler(handler *FocusChangedEventHandler) error {
+func (auto *UIAutomation) AddFocusChangedEventHandler(cacheRequest *CacheRequest, handler *FocusChangedEventHandler) error {
 	hr, _, _ := syscall.SyscallN(
 		auto.VTable().AddFocusChangedEventHandler,
 		uintptr(unsafe.Pointer(auto)),
+		uintptr(unsafe.Pointer(cacheRequest)),
 		uintptr(unsafe.Pointer(handler)),
 	)
 

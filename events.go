@@ -51,6 +51,8 @@ const (
 
 type EventHandler struct {
 	ole.IUnknown
+	refCount uintptr
+	callback func(*Element, EventId) error
 }
 
 type EventHandlerVtbl struct {
@@ -58,27 +60,80 @@ type EventHandlerVtbl struct {
 	HandleAutomationEvent uintptr
 }
 
-func (eh *EventHandler) VTable() *EventHandlerVtbl {
-	return (*EventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
-}
-
-func (eh *EventHandler) HandleAutomationEvent(element *Element, eventId EventId) error {
-	hr, _, _ := syscall.SyscallN(
-		eh.VTable().HandleAutomationEvent,
-		uintptr(unsafe.Pointer(eh)),
-		uintptr(unsafe.Pointer(element)),
-		uintptr(eventId),
-	)
-
-	if hr != 0 {
-		return ole.NewError(hr)
+func NewEventHandler(callback func(*Element, EventId) error) *EventHandler {
+	h := &EventHandler{
+		IUnknown: ole.IUnknown{},
+		refCount: 1,
+		callback: callback,
 	}
 
-	return nil
+	vtbl := &EventHandlerVtbl{
+		IUnknownVtbl: ole.IUnknownVtbl{
+			QueryInterface: syscall.NewCallback(h.queryInterface),
+			AddRef:         syscall.NewCallback(h.addRef),
+			Release:        syscall.NewCallback(h.release),
+		},
+		HandleAutomationEvent: syscall.NewCallback(h.handleAutomationEvent),
+	}
+
+	h.RawVTable = (*interface{})(unsafe.Pointer(vtbl))
+
+	return h
+}
+
+func (h *EventHandler) VTable() *EventHandlerVtbl {
+	return (*EventHandlerVtbl)(unsafe.Pointer(h.RawVTable))
+}
+
+func (h *EventHandler) queryInterface(this *ole.IUnknown, iid *ole.GUID, punk **ole.IUnknown) uintptr {
+	if iid == nil || punk == nil {
+		return uintptr(ole.E_POINTER)
+	}
+
+	*punk = nil
+
+	if ole.IsEqualGUID(iid, ole.IID_IUnknown) ||
+		ole.IsEqualGUID(iid, ole.IID_IDispatch) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	if ole.IsEqualGUID(iid, IID_IUIAutomationEventHandler) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	return uintptr(ole.E_NOINTERFACE)
+}
+
+func (h *EventHandler) addRef(this *ole.IUnknown) uintptr {
+	handler := (*EventHandler)(unsafe.Pointer(this))
+	handler.refCount++
+	return handler.refCount
+}
+
+func (h *EventHandler) release(this *ole.IUnknown) uintptr {
+	handler := (*EventHandler)(unsafe.Pointer(this))
+	handler.refCount--
+	return handler.refCount
+}
+
+func (h *EventHandler) handleAutomationEvent(this *EventHandler, element *Element, eventId EventId) uintptr {
+	err := h.callback(element, eventId)
+
+	if err != nil {
+		return uintptr(ole.E_FAIL)
+	}
+
+	return uintptr(ole.S_OK)
 }
 
 type PropertyChangedEventHandler struct {
 	ole.IUnknown
+	refCount uintptr
+	callback func(*Element, PropertyId, *ole.VARIANT) error
 }
 
 type PropertyChangedEventHandlerVtbl struct {
@@ -86,28 +141,80 @@ type PropertyChangedEventHandlerVtbl struct {
 	HandlePropertyChangedEvent uintptr
 }
 
-func (eh *PropertyChangedEventHandler) VTable() *PropertyChangedEventHandlerVtbl {
-	return (*PropertyChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
-}
-
-func (eh *PropertyChangedEventHandler) HandlePropertyChangedEvent(element *Element, propertyId int32, newValue *ole.VARIANT) error {
-	hr, _, _ := syscall.SyscallN(
-		eh.VTable().HandlePropertyChangedEvent,
-		uintptr(unsafe.Pointer(eh)),
-		uintptr(unsafe.Pointer(element)),
-		uintptr(propertyId),
-		uintptr(unsafe.Pointer(newValue)),
-	)
-
-	if hr != 0 {
-		return ole.NewError(hr)
+func NewPropertyChangedEventHandler(callback func(*Element, PropertyId, *ole.VARIANT) error) *PropertyChangedEventHandler {
+	h := &PropertyChangedEventHandler{
+		IUnknown: ole.IUnknown{},
+		refCount: 1,
+		callback: callback,
 	}
 
-	return nil
+	vtbl := &PropertyChangedEventHandlerVtbl{
+		IUnknownVtbl: ole.IUnknownVtbl{
+			QueryInterface: syscall.NewCallback(h.queryInterface),
+			AddRef:         syscall.NewCallback(h.addRef),
+			Release:        syscall.NewCallback(h.release),
+		},
+		HandlePropertyChangedEvent: syscall.NewCallback(h.handlePropertyChangedEvent),
+	}
+
+	h.RawVTable = (*interface{})(unsafe.Pointer(vtbl))
+
+	return h
+}
+
+func (h *PropertyChangedEventHandler) VTable() *PropertyChangedEventHandlerVtbl {
+	return (*PropertyChangedEventHandlerVtbl)(unsafe.Pointer(h.RawVTable))
+}
+
+func (h *PropertyChangedEventHandler) queryInterface(this *ole.IUnknown, iid *ole.GUID, punk **ole.IUnknown) uintptr {
+	if iid == nil || punk == nil {
+		return uintptr(ole.E_POINTER)
+	}
+
+	*punk = nil
+
+	if ole.IsEqualGUID(iid, ole.IID_IUnknown) ||
+		ole.IsEqualGUID(iid, ole.IID_IDispatch) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	if ole.IsEqualGUID(iid, IID_IUIAutomationPropertyChangedEventHandler) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	return uintptr(ole.E_NOINTERFACE)
+}
+
+func (h *PropertyChangedEventHandler) addRef(this *ole.IUnknown) uintptr {
+	handler := (*PropertyChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount++
+	return handler.refCount
+}
+
+func (h *PropertyChangedEventHandler) release(this *ole.IUnknown) uintptr {
+	handler := (*PropertyChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount--
+	return handler.refCount
+}
+
+func (h *PropertyChangedEventHandler) handlePropertyChangedEvent(this *PropertyChangedEventHandler, element *Element, propertyId PropertyId, newValue *ole.VARIANT) uintptr {
+	err := h.callback(element, propertyId, newValue)
+
+	if err != nil {
+		return uintptr(ole.E_FAIL)
+	}
+
+	return uintptr(ole.S_OK)
 }
 
 type FocusChangedEventHandler struct {
 	ole.IUnknown
+	refCount uintptr
+	callback func(*Element) error
 }
 
 type FocusChangedEventHandlerVtbl struct {
@@ -115,26 +222,80 @@ type FocusChangedEventHandlerVtbl struct {
 	HandleFocusChangedEvent uintptr
 }
 
-func (eh *FocusChangedEventHandler) VTable() *FocusChangedEventHandlerVtbl {
-	return (*FocusChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
-}
-
-func (eh *FocusChangedEventHandler) HandleFocusChangedEvent(element *Element) error {
-	hr, _, _ := syscall.SyscallN(
-		eh.VTable().HandleFocusChangedEvent,
-		uintptr(unsafe.Pointer(eh)),
-		uintptr(unsafe.Pointer(element)),
-	)
-
-	if hr != 0 {
-		return ole.NewError(hr)
+func NewFocusChangedEventHandler(callback func(*Element) error) *FocusChangedEventHandler {
+	h := &FocusChangedEventHandler{
+		IUnknown: ole.IUnknown{},
+		refCount: 1,
+		callback: callback,
 	}
 
-	return nil
+	vtbl := &FocusChangedEventHandlerVtbl{
+		IUnknownVtbl: ole.IUnknownVtbl{
+			QueryInterface: syscall.NewCallback(h.queryInterface),
+			AddRef:         syscall.NewCallback(h.addRef),
+			Release:        syscall.NewCallback(h.release),
+		},
+		HandleFocusChangedEvent: syscall.NewCallback(h.handleFocusChangedEvent),
+	}
+
+	h.RawVTable = (*interface{})(unsafe.Pointer(vtbl))
+
+	return h
+}
+
+func (h *FocusChangedEventHandler) VTable() *FocusChangedEventHandlerVtbl {
+	return (*FocusChangedEventHandlerVtbl)(unsafe.Pointer(h.RawVTable))
+}
+
+func (h *FocusChangedEventHandler) queryInterface(this *ole.IUnknown, iid *ole.GUID, punk **ole.IUnknown) uintptr {
+	if iid == nil || punk == nil {
+		return uintptr(ole.E_POINTER)
+	}
+
+	*punk = nil
+
+	if ole.IsEqualGUID(iid, ole.IID_IUnknown) ||
+		ole.IsEqualGUID(iid, ole.IID_IDispatch) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	if ole.IsEqualGUID(iid, IID_IUIAutomationFocusChangedEventHandler) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	return uintptr(ole.E_NOINTERFACE)
+}
+
+func (h *FocusChangedEventHandler) addRef(this *ole.IUnknown) uintptr {
+	handler := (*FocusChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount++
+	return handler.refCount
+}
+
+func (h *FocusChangedEventHandler) release(this *ole.IUnknown) uintptr {
+	handler := (*FocusChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount--
+	return handler.refCount
+}
+
+func (h *FocusChangedEventHandler) handleFocusChangedEvent(this *FocusChangedEventHandler, element *Element) uintptr {
+	err := h.callback(element)
+
+	if err != nil {
+		return uintptr(ole.E_FAIL)
+	}
+
+	return uintptr(ole.S_OK)
 }
 
 type StructureChangedEventHandler struct {
 	ole.IUnknown
+	refCount uintptr
+	callback func(*Element, StructureChangeType, *ole.SafeArray) error
 }
 
 type StructureChangedEventHandlerVtbl struct {
@@ -142,22 +303,72 @@ type StructureChangedEventHandlerVtbl struct {
 	HandleStructureChangedEvent uintptr
 }
 
-func (eh *StructureChangedEventHandler) VTable() *StructureChangedEventHandlerVtbl {
-	return (*StructureChangedEventHandlerVtbl)(unsafe.Pointer(eh.RawVTable))
-}
-
-func (eh *StructureChangedEventHandler) HandleStructureChangedEvent(element *Element, changeType StructureChangeType, runtimeId *ole.SafeArray) error {
-	hr, _, _ := syscall.SyscallN(
-		eh.VTable().HandleStructureChangedEvent,
-		uintptr(unsafe.Pointer(eh)),
-		uintptr(unsafe.Pointer(element)),
-		uintptr(changeType),
-		uintptr(unsafe.Pointer(runtimeId)),
-	)
-
-	if hr != 0 {
-		return ole.NewError(hr)
+func NewStructureChangedEventHandler(callback func(*Element, StructureChangeType, *ole.SafeArray) error) *StructureChangedEventHandler {
+	h := &StructureChangedEventHandler{
+		IUnknown: ole.IUnknown{},
+		refCount: 1,
+		callback: callback,
 	}
 
-	return nil
+	vtbl := &StructureChangedEventHandlerVtbl{
+		IUnknownVtbl: ole.IUnknownVtbl{
+			QueryInterface: syscall.NewCallback(h.queryInterface),
+			AddRef:         syscall.NewCallback(h.addRef),
+			Release:        syscall.NewCallback(h.release),
+		},
+		HandleStructureChangedEvent: syscall.NewCallback(h.handleStructureChangedEvent),
+	}
+
+	h.RawVTable = (*interface{})(unsafe.Pointer(vtbl))
+
+	return h
+}
+
+func (h *StructureChangedEventHandler) VTable() *StructureChangedEventHandlerVtbl {
+	return (*StructureChangedEventHandlerVtbl)(unsafe.Pointer(h.RawVTable))
+}
+
+func (h *StructureChangedEventHandler) queryInterface(this *ole.IUnknown, iid *ole.GUID, punk **ole.IUnknown) uintptr {
+	if iid == nil || punk == nil {
+		return uintptr(ole.E_POINTER)
+	}
+
+	*punk = nil
+
+	if ole.IsEqualGUID(iid, ole.IID_IUnknown) ||
+		ole.IsEqualGUID(iid, ole.IID_IDispatch) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	if ole.IsEqualGUID(iid, IID_IUIAutomationStructureChangedEventHandler) {
+		h.addRef(this)
+		*punk = this
+		return uintptr(ole.S_OK)
+	}
+
+	return uintptr(ole.E_NOINTERFACE)
+}
+
+func (h *StructureChangedEventHandler) addRef(this *ole.IUnknown) uintptr {
+	handler := (*StructureChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount++
+	return handler.refCount
+}
+
+func (h *StructureChangedEventHandler) release(this *ole.IUnknown) uintptr {
+	handler := (*StructureChangedEventHandler)(unsafe.Pointer(this))
+	handler.refCount--
+	return handler.refCount
+}
+
+func (h *StructureChangedEventHandler) handleStructureChangedEvent(this *StructureChangedEventHandler, element *Element, changeType StructureChangeType, runtimeId *ole.SafeArray) uintptr {
+	err := h.callback(element, changeType, runtimeId)
+
+	if err != nil {
+		return uintptr(ole.E_FAIL)
+	}
+
+	return uintptr(ole.S_OK)
 }
