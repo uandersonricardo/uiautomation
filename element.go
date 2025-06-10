@@ -1449,7 +1449,7 @@ func (elem *Element) ClickablePoint() (Point, bool, error) {
 
 func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(InvokePatternId)
@@ -1459,7 +1459,7 @@ func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	invokePattern, err := patternObject.QueryInterface(IID_IUIAutomationInvokePattern)
@@ -1473,7 +1473,7 @@ func (elem *Element) GetInvokePattern() (*InvokePattern, error) {
 
 func (elem *Element) GetSelectionPattern() (*SelectionPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(SelectionPatternId)
@@ -1483,7 +1483,7 @@ func (elem *Element) GetSelectionPattern() (*SelectionPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	selectionPattern, err := patternObject.QueryInterface(IID_IUIAutomationSelectionPattern)
@@ -1497,7 +1497,7 @@ func (elem *Element) GetSelectionPattern() (*SelectionPattern, error) {
 
 func (elem *Element) GetValuePattern() (*ValuePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ValuePatternId)
@@ -1507,7 +1507,7 @@ func (elem *Element) GetValuePattern() (*ValuePattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	valuePattern, err := patternObject.QueryInterface(IID_IUIAutomationValuePattern)
@@ -1521,7 +1521,7 @@ func (elem *Element) GetValuePattern() (*ValuePattern, error) {
 
 func (elem *Element) GetRangeValuePattern() (*RangeValuePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(RangeValuePatternId)
@@ -1531,7 +1531,7 @@ func (elem *Element) GetRangeValuePattern() (*RangeValuePattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	rangeValuePattern, err := patternObject.QueryInterface(IID_IUIAutomationRangeValuePattern)
@@ -1545,7 +1545,7 @@ func (elem *Element) GetRangeValuePattern() (*RangeValuePattern, error) {
 
 func (elem *Element) GetScrollPattern() (*ScrollPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ScrollPatternId)
@@ -1555,7 +1555,7 @@ func (elem *Element) GetScrollPattern() (*ScrollPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	scrollPattern, err := patternObject.QueryInterface(IID_IUIAutomationScrollPattern)
@@ -1569,7 +1569,7 @@ func (elem *Element) GetScrollPattern() (*ScrollPattern, error) {
 
 func (elem *Element) GetExpandCollapsePattern() (*ExpandCollapsePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ExpandCollapsePatternId)
@@ -1579,7 +1579,7 @@ func (elem *Element) GetExpandCollapsePattern() (*ExpandCollapsePattern, error) 
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	expandCollapsePattern, err := patternObject.QueryInterface(IID_IUIAutomationExpandCollapsePattern)
@@ -1593,7 +1593,7 @@ func (elem *Element) GetExpandCollapsePattern() (*ExpandCollapsePattern, error) 
 
 func (elem *Element) GetGridPattern() (*GridPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(GridPatternId)
@@ -1603,7 +1603,7 @@ func (elem *Element) GetGridPattern() (*GridPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	gridPattern, err := patternObject.QueryInterface(IID_IUIAutomationGridPattern)
@@ -1617,7 +1617,7 @@ func (elem *Element) GetGridPattern() (*GridPattern, error) {
 
 func (elem *Element) GetGridItemPattern() (*GridItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(GridItemPatternId)
@@ -1627,7 +1627,7 @@ func (elem *Element) GetGridItemPattern() (*GridItemPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	gridItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationGridItemPattern)
@@ -1641,7 +1641,7 @@ func (elem *Element) GetGridItemPattern() (*GridItemPattern, error) {
 
 func (elem *Element) GetMultipleViewPattern() (*MultipleViewPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(MultipleViewPatternId)
@@ -1651,7 +1651,7 @@ func (elem *Element) GetMultipleViewPattern() (*MultipleViewPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	multipleViewPattern, err := patternObject.QueryInterface(IID_IUIAutomationMultipleViewPattern)
@@ -1665,7 +1665,7 @@ func (elem *Element) GetMultipleViewPattern() (*MultipleViewPattern, error) {
 
 func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(WindowPatternId)
@@ -1675,7 +1675,7 @@ func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	windowPattern, err := patternObject.QueryInterface(IID_IUIAutomationWindowPattern)
@@ -1689,7 +1689,7 @@ func (elem *Element) GetWindowPattern() (*WindowPattern, error) {
 
 func (elem *Element) GetSelectionItemPattern() (*SelectionItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(SelectionItemPatternId)
@@ -1699,7 +1699,7 @@ func (elem *Element) GetSelectionItemPattern() (*SelectionItemPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	selectionItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationSelectionItemPattern)
@@ -1713,7 +1713,7 @@ func (elem *Element) GetSelectionItemPattern() (*SelectionItemPattern, error) {
 
 func (elem *Element) GetDockPattern() (*DockPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(DockPatternId)
@@ -1723,7 +1723,7 @@ func (elem *Element) GetDockPattern() (*DockPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	dockPattern, err := patternObject.QueryInterface(IID_IUIAutomationDockPattern)
@@ -1737,7 +1737,7 @@ func (elem *Element) GetDockPattern() (*DockPattern, error) {
 
 func (elem *Element) GetTablePattern() (*TablePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TablePatternId)
@@ -1747,7 +1747,7 @@ func (elem *Element) GetTablePattern() (*TablePattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	tablePattern, err := patternObject.QueryInterface(IID_IUIAutomationTablePattern)
@@ -1761,7 +1761,7 @@ func (elem *Element) GetTablePattern() (*TablePattern, error) {
 
 func (elem *Element) GetTableItemPattern() (*TableItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TableItemPatternId)
@@ -1771,7 +1771,7 @@ func (elem *Element) GetTableItemPattern() (*TableItemPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	tableItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationTableItemPattern)
@@ -1785,7 +1785,7 @@ func (elem *Element) GetTableItemPattern() (*TableItemPattern, error) {
 
 func (elem *Element) GetTextPattern() (*TextPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TextPatternId)
@@ -1795,7 +1795,7 @@ func (elem *Element) GetTextPattern() (*TextPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	textPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextPattern)
@@ -1809,7 +1809,7 @@ func (elem *Element) GetTextPattern() (*TextPattern, error) {
 
 func (elem *Element) GetTogglePattern() (*TogglePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TogglePatternId)
@@ -1819,7 +1819,7 @@ func (elem *Element) GetTogglePattern() (*TogglePattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	togglePattern, err := patternObject.QueryInterface(IID_IUIAutomationTogglePattern)
@@ -1833,7 +1833,7 @@ func (elem *Element) GetTogglePattern() (*TogglePattern, error) {
 
 func (elem *Element) GetTransformPattern() (*TransformPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TransformPatternId)
@@ -1843,7 +1843,7 @@ func (elem *Element) GetTransformPattern() (*TransformPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	transformPattern, err := patternObject.QueryInterface(IID_IUIAutomationTransformPattern)
@@ -1857,7 +1857,7 @@ func (elem *Element) GetTransformPattern() (*TransformPattern, error) {
 
 func (elem *Element) GetScrollItemPattern() (*ScrollItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ScrollItemPatternId)
@@ -1867,7 +1867,7 @@ func (elem *Element) GetScrollItemPattern() (*ScrollItemPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	scrollItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationScrollItemPattern)
@@ -1881,7 +1881,7 @@ func (elem *Element) GetScrollItemPattern() (*ScrollItemPattern, error) {
 
 func (elem *Element) GetLegacyAccessiblePattern() (*LegacyAccessiblePattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(LegacyIAccessiblePatternId)
@@ -1891,7 +1891,7 @@ func (elem *Element) GetLegacyAccessiblePattern() (*LegacyAccessiblePattern, err
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	legacyAccessiblePattern, err := patternObject.QueryInterface(IID_IUIAutomationLegacyIAccessiblePattern)
@@ -1905,7 +1905,7 @@ func (elem *Element) GetLegacyAccessiblePattern() (*LegacyAccessiblePattern, err
 
 func (elem *Element) GetItemContainerPattern() (*ItemContainerPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ItemContainerPatternId)
@@ -1915,7 +1915,7 @@ func (elem *Element) GetItemContainerPattern() (*ItemContainerPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	itemContainerPattern, err := patternObject.QueryInterface(IID_IUIAutomationItemContainerPattern)
@@ -1929,7 +1929,7 @@ func (elem *Element) GetItemContainerPattern() (*ItemContainerPattern, error) {
 
 func (elem *Element) GetVirtualizedItemPattern() (*VirtualizedItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(VirtualizedItemPatternId)
@@ -1939,7 +1939,7 @@ func (elem *Element) GetVirtualizedItemPattern() (*VirtualizedItemPattern, error
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	virtualizedItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationVirtualizedItemPattern)
@@ -1953,7 +1953,7 @@ func (elem *Element) GetVirtualizedItemPattern() (*VirtualizedItemPattern, error
 
 func (elem *Element) GetSynchronizedInputPattern() (*SynchronizedInputPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(SynchronizedInputPatternId)
@@ -1963,7 +1963,7 @@ func (elem *Element) GetSynchronizedInputPattern() (*SynchronizedInputPattern, e
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	synchronizedInputPattern, err := patternObject.QueryInterface(IID_IUIAutomationSynchronizedInputPattern)
@@ -1977,7 +1977,7 @@ func (elem *Element) GetSynchronizedInputPattern() (*SynchronizedInputPattern, e
 
 func (elem *Element) GetObjectModelPattern() (*ObjectModelPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(ObjectModelPatternId)
@@ -1987,7 +1987,7 @@ func (elem *Element) GetObjectModelPattern() (*ObjectModelPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	objectModelPattern, err := patternObject.QueryInterface(IID_IUIAutomationObjectModelPattern)
@@ -2001,7 +2001,7 @@ func (elem *Element) GetObjectModelPattern() (*ObjectModelPattern, error) {
 
 func (elem *Element) GetAnnotationPattern() (*AnnotationPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(AnnotationPatternId)
@@ -2011,7 +2011,7 @@ func (elem *Element) GetAnnotationPattern() (*AnnotationPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	annotationPattern, err := patternObject.QueryInterface(IID_IUIAutomationAnnotationPattern)
@@ -2025,7 +2025,7 @@ func (elem *Element) GetAnnotationPattern() (*AnnotationPattern, error) {
 
 func (elem *Element) GetTextPattern2() (*TextPattern2, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TextPattern2Id)
@@ -2035,7 +2035,7 @@ func (elem *Element) GetTextPattern2() (*TextPattern2, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	textPattern2, err := patternObject.QueryInterface(IID_IUIAutomationTextPattern2)
@@ -2049,7 +2049,7 @@ func (elem *Element) GetTextPattern2() (*TextPattern2, error) {
 
 func (elem *Element) GetStylesPattern() (*StylesPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(StylesPatternId)
@@ -2059,7 +2059,7 @@ func (elem *Element) GetStylesPattern() (*StylesPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	stylesPattern, err := patternObject.QueryInterface(IID_IUIAutomationStylesPattern)
@@ -2073,7 +2073,7 @@ func (elem *Element) GetStylesPattern() (*StylesPattern, error) {
 
 func (elem *Element) GetSpreadsheetPattern() (*SpreadsheetPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(SpreadsheetPatternId)
@@ -2083,7 +2083,7 @@ func (elem *Element) GetSpreadsheetPattern() (*SpreadsheetPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	spreadsheetPattern, err := patternObject.QueryInterface(IID_IUIAutomationSpreadsheetPattern)
@@ -2097,7 +2097,7 @@ func (elem *Element) GetSpreadsheetPattern() (*SpreadsheetPattern, error) {
 
 func (elem *Element) GetSpreadsheetItemPattern() (*SpreadsheetItemPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(SpreadsheetItemPatternId)
@@ -2107,7 +2107,7 @@ func (elem *Element) GetSpreadsheetItemPattern() (*SpreadsheetItemPattern, error
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	spreadsheetItemPattern, err := patternObject.QueryInterface(IID_IUIAutomationSpreadsheetItemPattern)
@@ -2121,7 +2121,7 @@ func (elem *Element) GetSpreadsheetItemPattern() (*SpreadsheetItemPattern, error
 
 func (elem *Element) GetTransformPattern2() (*TransformPattern2, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TransformPattern2Id)
@@ -2131,7 +2131,7 @@ func (elem *Element) GetTransformPattern2() (*TransformPattern2, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	transformPattern2, err := patternObject.QueryInterface(IID_IUIAutomationTransformPattern2)
@@ -2145,7 +2145,7 @@ func (elem *Element) GetTransformPattern2() (*TransformPattern2, error) {
 
 func (elem *Element) GetTextChildPattern() (*TextChildPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TextChildPatternId)
@@ -2155,7 +2155,7 @@ func (elem *Element) GetTextChildPattern() (*TextChildPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	textChildPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextChildPattern)
@@ -2169,7 +2169,7 @@ func (elem *Element) GetTextChildPattern() (*TextChildPattern, error) {
 
 func (elem *Element) GetDragPattern() (*DragPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(DragPatternId)
@@ -2179,7 +2179,7 @@ func (elem *Element) GetDragPattern() (*DragPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	dragPattern, err := patternObject.QueryInterface(IID_IUIAutomationDragPattern)
@@ -2193,7 +2193,7 @@ func (elem *Element) GetDragPattern() (*DragPattern, error) {
 
 func (elem *Element) GetDropTargetPattern() (*DropTargetPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(DropTargetPatternId)
@@ -2203,7 +2203,7 @@ func (elem *Element) GetDropTargetPattern() (*DropTargetPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	dropTargetPattern, err := patternObject.QueryInterface(IID_IUIAutomationDropTargetPattern)
@@ -2217,7 +2217,7 @@ func (elem *Element) GetDropTargetPattern() (*DropTargetPattern, error) {
 
 func (elem *Element) GetTextEditPattern() (*TextEditPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(TextEditPatternId)
@@ -2227,7 +2227,7 @@ func (elem *Element) GetTextEditPattern() (*TextEditPattern, error) {
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	textEditPattern, err := patternObject.QueryInterface(IID_IUIAutomationTextEditPattern)
@@ -2241,7 +2241,7 @@ func (elem *Element) GetTextEditPattern() (*TextEditPattern, error) {
 
 func (elem *Element) GetCustomNavigationPattern() (*CustomNavigationPattern, error) {
 	if elem == nil {
-		return nil, ErrElementIsNil
+		return nil, ole.NewError(ole.E_POINTER)
 	}
 
 	patternObject, err := elem.GetCurrentPattern(CustomNavigationPatternId)
@@ -2251,7 +2251,7 @@ func (elem *Element) GetCustomNavigationPattern() (*CustomNavigationPattern, err
 	}
 
 	if patternObject == nil {
-		return nil, ErrPatternNotFound
+		return nil, ole.NewError(ole.E_NOINTERFACE)
 	}
 
 	customNavigationPattern, err := patternObject.QueryInterface(IID_IUIAutomationCustomNavigationPattern)
@@ -2265,7 +2265,7 @@ func (elem *Element) GetCustomNavigationPattern() (*CustomNavigationPattern, err
 
 func (elem *Element) SetValue(value string) error {
 	if elem == nil {
-		return ErrElementIsNil
+		return ole.NewError(ole.E_POINTER)
 	}
 
 	valuePattern, err := elem.GetValuePattern()
@@ -2281,7 +2281,7 @@ func (elem *Element) SetValue(value string) error {
 
 func (elem *Element) Invoke() error {
 	if elem == nil {
-		return ErrElementIsNil
+		return ole.NewError(ole.E_POINTER)
 	}
 
 	invokePattern, err := elem.GetInvokePattern()
@@ -2297,7 +2297,7 @@ func (elem *Element) Invoke() error {
 
 func (elem *Element) DoDefaultAction() error {
 	if elem == nil {
-		return ErrElementIsNil
+		return ole.NewError(ole.E_POINTER)
 	}
 
 	legacyAccessiblePattern, err := elem.GetLegacyAccessiblePattern()
@@ -2313,25 +2313,25 @@ func (elem *Element) DoDefaultAction() error {
 
 func (elem *Element) NormalizeWindow() error {
 	if elem == nil {
-		return ErrElementIsNil
+		return ole.NewError(ole.E_POINTER)
 	}
 
 	windowPattern, err := elem.GetWindowPattern()
-	
+
 	if err != nil {
 		return err
 	}
-	
+
 	defer windowPattern.Release()
 
 	state, err := windowPattern.CurrentWindowVisualState()
-	
+
 	if err != nil {
-		return fmt.Errorf("failed to get window visual state: %w", err)
+		return err
 	}
 
 	if state == WindowVisualStateNormal {
-		return nil // already normalized
+		return nil
 	}
 
 	return windowPattern.SetWindowVisualState(WindowVisualStateNormal)
@@ -2339,7 +2339,7 @@ func (elem *Element) NormalizeWindow() error {
 
 func (elem *Element) CloseWindow() error {
 	if elem == nil {
-		return ErrElementIsNil
+		return ole.NewError(ole.E_POINTER)
 	}
 
 	windowPattern, err := elem.GetWindowPattern()
@@ -2355,7 +2355,7 @@ func (elem *Element) CloseWindow() error {
 
 func (elem *Element) CurrentControlTypeName() (string, error) {
 	if elem == nil {
-		return "", ErrElementIsNil
+		return "", ole.NewError(ole.E_POINTER)
 	}
 
 	controlTypeId, err := elem.CurrentControlType()
